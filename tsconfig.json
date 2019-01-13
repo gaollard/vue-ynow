@@ -10,7 +10,7 @@
     "experimentalDecorators": true,
     "allowJs": true,
     "module": "esnext",
-    "target": "es5",
+    "target": "ES5",
     "moduleResolution": "node",
     "isolatedModules": true,
     "lib": [
