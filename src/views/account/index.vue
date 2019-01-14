@@ -20,7 +20,7 @@
       <div>积分</div>
     </div>
     <div class="card-link">
-      <div class="cell">收获地址管理</div>
+      <router-link class="cell" to="/DeliveryAddress">地址管理</router-link>
       <div class="cell">银行卡管理</div>
       <div class="cell">帮助中心</div>
     </div>
@@ -110,8 +110,10 @@ export default class AccountView extends Vue {
   margin-top: 10px;
   background: #fff;
   .cell {
+    display: block;
     padding: 10px 15px;
     line-height: 24px;
+    color: #333;
     border-bottom: 1px solid #f5f5f5;
     box-sizing: border-box;
   }

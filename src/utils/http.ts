@@ -3,7 +3,7 @@ import axios from 'axios'
 
 axios.interceptors.request.use(function (config) {
   console.log(config)
-  config.url += '?token=2910b2389f7ba85ac901a8c4db01e6c8'
+  config.url += '?token=2a4040c921ec81b0964c5784652bc4c1'
   if (config.method === 'POST') {
     config.data = qs.stringify(config.data)
   }
