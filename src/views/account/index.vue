@@ -8,6 +8,9 @@
           <div class="mobile">{{ userInfo.mobile }}</div>
         </div>
         <div class="btn-set">账户设置</div>
+        <div class="btn-checkin">
+          <span>{{ checkinStatus ? '已签到' : '签到' }}</span>
+        </div>
       </template>
       <template v-else>
         <div>加载中...</div>
@@ -17,12 +20,12 @@
       <div>收藏</div>
       <div>关注</div>
       <div>订单</div>
-      <div>积分</div>
+      <router-link to="/point">积分</router-link>
+      <router-link to="/checkin">签到</router-link>
     </div>
     <div class="card-link">
-      <router-link class="cell" to="/DeliveryAddress">地址管理</router-link>
-      <div class="cell">银行卡管理</div>
-      <div class="cell">帮助中心</div>
+      <van-cell title="地址管理" is-link to="/DeliveryAddress"/>
+      <van-cell title="帮助中心" is-link to="/DeliveryAddress"/>
     </div>
   </div>
 </template>
@@ -35,9 +38,14 @@ import ynowApi from '../../api/ynow'
 @Component
 export default class AccountView extends Vue {
   userInfo = null
+  checkinStatus = true
+
   mounted () {
     ynowApi.getUserInfo().then(res => {
       this.userInfo = res.data
+    })
+    ynowApi.getCheckinStatus().then(res => {
+      this.checkinStatus = res.data.status === 1
     })
   }
 }
@@ -85,6 +93,15 @@ export default class AccountView extends Vue {
     padding: 5px 8px;
     border: 1px solid #999;
   }
+  .btn-checkin {
+    position: absolute;
+    top: 100px;
+    right: 10px;
+    font-size: 14px;
+    line-height: 20px;
+    padding: 5px 8px;
+    border: 1px solid #999;
+  }
 }
 
 .card-menu {
@@ -92,13 +109,14 @@ export default class AccountView extends Vue {
   align-items: center;
   justify-content: center;
   background: #fff;
-  > div {
+  > * {
     flex: 1;
     font-size: 14px;
     padding: 10px 0;
     text-align: center;
     border: 1px solid #f5f5f5;
     border-right: 0;
+    color: #333;
     &:first-child {
       border-left: 0;
     }

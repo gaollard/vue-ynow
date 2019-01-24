@@ -1,5 +1,5 @@
 <template>
-  <div class="view">
+  <div class="view-deliveryAddress">
     <ul class="list">
       <li class="item" v-for="(item, index) in list" :key="index">
         <div class="item__hd">
@@ -42,13 +42,11 @@ export default class AccountView extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.view {
-  min-height: 100vh;
-  background: #f5f5f5;
+.list {
+  overflow: hidden;
 }
 
 .item {
-  overflow: hidden;
   margin-bottom: 8px;
   background: #fff;
 }

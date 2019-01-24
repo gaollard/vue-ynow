@@ -1,9 +1,10 @@
 import qs from 'qs'
 import axios from 'axios'
+import cookies from 'js-cookie'
 
 axios.interceptors.request.use(function (config) {
-  console.log(config)
-  config.url += '?token=2a4040c921ec81b0964c5784652bc4c1'
+  const token = cookies.get('token') || ''
+  config.url = `${config.url}?token=${token}`
   if (config.method === 'POST') {
     config.data = qs.stringify(config.data)
   }
