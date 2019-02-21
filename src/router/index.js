@@ -8,7 +8,6 @@ import DeliveryAddress from '../views/deliveryAddress/index.vue'
 import Demand from '../views/demand/index.vue'
 const Login = () => import('../views/login/index.vue')
 const Point = () => import('../views/point/index.vue')
-const Checkin = () => import('../views/checkin/index.vue')
 
 Vue.use(Router)
 
@@ -50,9 +49,22 @@ export default new Router({
       component: Point
     },
     {
-      path: '/Checkin',
-      name: 'Checkin',
-      component: Checkin
+      // 签到页面
+      path: '/checkin',
+      name: 'checkin',
+      component: import('../views/checkin')
+    },
+    {
+      // 闲置商品列表页面
+      path: '/xzProduct',
+      name: 'xzProduct',
+      component: () => import('../views/xzProduct')
+    },
+    {
+      // 闲置商品详情页面
+      path: '/xzProductItem/:itemId',
+      name: 'xzProductItem',
+      component: () => import('../views/xzProductItem')
     }
   ]
 })

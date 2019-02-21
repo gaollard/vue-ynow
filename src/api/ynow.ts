@@ -12,11 +12,11 @@ export default {
   },
   // 获取当天签到状态
   getCheckinStatus () {
-    return http.get(`${host}/checkin`);
+    return http.get(`${host}/checkin`)
   },
   // 签到
   checkin () {
-    return http.post(`${host}/checkin`);
+    return http.post(`${host}/checkin`)
   },
   // 获取签到信息
   getCheckinList () {
@@ -33,5 +33,13 @@ export default {
   // 获取需求列表
   getDemandList () {
     return http.get(`${host}/demand`)
+  },
+  // 获取闲置商品
+  getXzProductList () {
+    return http.get(`${host}/xzProduct`)
+  },
+  // 获取闲置商品详情
+  getXzProductItem (itemId) {
+    return http.get(`${host}/xzProduct/${itemId}`)
   }
 }
