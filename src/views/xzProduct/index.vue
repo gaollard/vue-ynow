@@ -1,7 +1,12 @@
 <template>
   <div class="view">
-    <ul class="p-list">
-      <li class="p-item" v-for="(item, index) in list" :key="index">
+    <div class="p-list">
+      <router-link
+        class="p-item"
+        v-for="(item, index) in list"
+        :key="index"
+        :to="'/xzProductItem/'+item.id"
+      >
         <div class="p-img" :style="{backgroundImage: 'url(' + item.imgs[0] + ')'}"></div>
         <div class="p-info">
           <p class="p-name">{{ item.name }}</p>
@@ -12,8 +17,8 @@
           <span class="p-username">Gaollard</span>
           <span class="p-credit">信用良好</span>
         </div>
-      </li>
-    </ul>
+      </router-link>
+    </div>
   </div>
 </template>
 
@@ -55,6 +60,7 @@ export default {
   float: left;
   width: 170px;
   font-size: 14px;
+  color: #000;
   background-color: #fff;
   box-sizing: border-box;
 }

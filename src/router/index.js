@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Welcome from '../views/welcome/index.vue'
 import Account from '../views/account/index.vue'
 import Product from '../views/product/index.vue'
 import DeliveryAddress from '../views/deliveryAddress/index.vue'
@@ -16,7 +15,12 @@ export default new Router({
     {
       path: '/',
       name: 'Welcome',
-      component: Welcome
+      component: () => import('../views/xzProduct')
+    },
+    {
+      path: '/Welcome',
+      name: 'Welcome',
+      component: () => import('../views/welcome')
     },
     {
       path: '/Account',

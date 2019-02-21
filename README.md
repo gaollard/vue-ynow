@@ -1,6 +1,6 @@
-# vue-typescript-starter
+# 咸鸭APP
 
-> A Vue.js project
+让闲置回归价值～
 
 ## Build Setup
 
