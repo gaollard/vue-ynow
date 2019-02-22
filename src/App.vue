@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <van-tabbar>
+    <van-tabbar v-show="$route.meta.tabbar">
       <van-tabbar-item icon="home-o" to="/">闲鸭</van-tabbar-item>
       <van-tabbar-item icon="bar-chart-o" to="/active">活动</van-tabbar-item>
       <van-tabbar-item icon="chat-o" info="5" to="/news">消息</van-tabbar-item>

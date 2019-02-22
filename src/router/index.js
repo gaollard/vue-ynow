@@ -15,7 +15,10 @@ export default new Router({
     {
       path: '/',
       name: 'Welcome',
-      component: () => import('../views/xzProduct')
+      component: () => import('../views/xzProduct'),
+      meta: {
+        tabbar: true
+      }
     },
     {
       path: '/Welcome',
@@ -25,7 +28,10 @@ export default new Router({
     {
       path: '/Account',
       name: 'Account',
-      component: Account
+      component: Account,
+      meta: {
+        tabbar: true
+      }
     },
     {
       path: '/DeliveryAddress',
@@ -69,6 +75,12 @@ export default new Router({
       path: '/xzProductItem/:itemId',
       name: 'xzProductItem',
       component: () => import('../views/xzProductItem')
+    },
+    {
+      // 闲置商品详情页面
+      path: '/userInfo',
+      name: 'userInfo',
+      component: () => import('../views/userInfo')
     }
   ]
 })
