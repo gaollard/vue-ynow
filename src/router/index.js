@@ -11,6 +11,7 @@ const Point = () => import('../views/point/index.vue')
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',
@@ -68,7 +69,10 @@ export default new Router({
       // 闲置商品列表页面
       path: '/xzProduct',
       name: 'xzProduct',
-      component: () => import('../views/xzProduct')
+      component: () => import('../views/xzProduct'),
+      meta: {
+        tabbar: true
+      }
     },
     {
       // 闲置商品详情页面
@@ -78,6 +82,12 @@ export default new Router({
     },
     {
       // 闲置商品详情页面
+      path: '/auction',
+      name: 'auction',
+      component: () => import('../views/auction')
+    },
+    {
+      // 用户信息
       path: '/userInfo',
       name: 'userInfo',
       component: () => import('../views/userInfo')

@@ -7,13 +7,14 @@
       @click-right="onClickRight"
     />
     <van-cell-group>
-      <van-cell title="头像" value="内容" is-link/>
-      <van-cell title="昵称" value="Gaollard" is-link/>
-      <van-cell title="背景图" value="内容" is-link/>
-      <van-cell title="性别" value="男" is-link/>
-      <van-cell title="手机号码" value="18620343136" is-link/>
-      <van-cell title="QQ绑定" value="1056834607" is-link/>
-      <van-cell title="微信绑定" value="GaoXiong957" is-link/>
+      <van-cell title="头像" value="无" is-link/>
+      <van-cell title="昵称" :value="userInfo.nickname" is-link/>
+      <van-cell title="背景图" value="无" is-link/>
+      <van-cell title="性别" :value="userInfo.gender==1?'男':'女'" is-link/>
+      <van-cell title="手机号码" :value="userInfo.mobile" is-link/>
+      <van-cell title="电子邮箱" :value="userInfo.email" is-link/>
+      <van-cell title="QQ绑定" value="无" is-link/>
+      <van-cell title="微信绑定" value="无" is-link/>
     </van-cell-group>
   </div>
 </template>
@@ -21,9 +22,15 @@
 <script>
 import Vue from 'vue'
 import { NavBar, Toast, Cell, CellGroup } from 'vant'
+import ynowApi from '../../api/ynow'
 Vue.use(NavBar).use(Cell).use(CellGroup)
 
 export default {
+  data () {
+    return {
+      userInfo: {}
+    }
+  },
   methods: {
     onClickLeft () {
       Toast('返回')
@@ -31,6 +38,11 @@ export default {
     onClickRight () {
       Toast('按钮')
     }
+  },
+  mounted () {
+    ynowApi.getUserInfo().then(res => {
+      this.userInfo = res.data
+    })
   }
 }
 </script>

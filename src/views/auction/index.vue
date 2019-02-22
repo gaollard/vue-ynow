@@ -1,5 +1,8 @@
 <template>
   <div class="view">
+    <div class="zero">
+      暂无竞拍商品~
+    </div>
     <div class="p-list">
       <router-link
         class="p-item"
@@ -32,16 +35,23 @@ export default {
   },
   mounted () {
     ynowApi.getXzProductList().then(res => {
-      this.list = res.data.list
+      // this.list = res.data.list
     })
   }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .view {
   min-height: 100vh;
   background-color: #eee;
+}
+
+.zero {
+  color: #666;
+  font-size: 13px;
+  text-align: center;
+  padding-top: 30px;
 }
 
 .p-list {

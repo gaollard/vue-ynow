@@ -7,7 +7,7 @@
           <div class="nickname">{{ userInfo.nickname }}</div>
           <div class="mobile">{{ userInfo.mobile }}</div>
         </div>
-        <div class="btn-set">账户设置</div>
+        <div class="btn-set" @click="$router.push('/userInfo')">账户设置</div>
         <div class="btn-checkin">
           <span>{{ checkinStatus ? '已签到' : '签到' }}</span>
         </div>
@@ -24,8 +24,11 @@
       <router-link to="/checkin">签到</router-link>
     </div>
     <div class="card-link">
-      <van-cell title="地址管理" is-link to="/DeliveryAddress"/>
-      <van-cell title="帮助中心" is-link to="/DeliveryAddress"/>
+      <van-cell title="地址管理" to="/DeliveryAddress"/>
+      <van-cell title="我的发布" to="/"/>
+      <van-cell title="我的收藏" to="/"/>
+      <van-cell title="我的喜欢" to="/"/>
+      <van-cell title="立即登录" to="/login"/>
     </div>
   </div>
 </template>
