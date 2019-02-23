@@ -4,8 +4,24 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 
-import { Cell, NavBar, CellGroup, Tabbar, TabbarItem } from 'vant';
-Vue.use(Cell).use(NavBar).use(CellGroup).use(Tabbar).use(TabbarItem);
+import {
+  Cell,
+  NavBar,
+  CellGroup,
+  Tabbar,
+  TabbarItem,
+  Field,
+  Switch
+} from 'vant';
+
+Vue
+  .use(Cell)
+  .use(NavBar)
+  .use(CellGroup)
+  .use(Tabbar)
+  .use(TabbarItem)
+  .use(Field)
+  .use(Switch)
 
 import './style/base.scss';
 import './style/cover.scss';

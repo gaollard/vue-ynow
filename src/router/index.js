@@ -106,6 +106,12 @@ export default new Router({
       path: '/collect',
       name: 'collect',
       component: () => import('../views/collect')
+    },
+    {
+      // 我的收藏
+      path: '/xzProductCreate',
+      name: 'xzProductCreate',
+      component: () => import('../views/xzProductCreate')
     }
   ]
 });
