@@ -21,28 +21,28 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import { NavBar } from 'vant'
-import ynowApi from '../../api/ynow'
-Vue.use(NavBar)
+import Vue from 'vue';
+import { NavBar } from 'vant';
+import ynowApi from '../../api/ynow';
+Vue.use(NavBar);
 
 export default {
   data () {
     return {
       userInfo: {}
-    }
+    };
   },
   methods: {
     onClickLeft () {
-      this.$router.go(-1)
+      this.$router.go(-1);
     }
   },
   mounted () {
     ynowApi.getUserInfo().then(res => {
-      this.userInfo = res.data
-    })
+      this.userInfo = res.data;
+    });
   }
-}
+};
 </script>
 
 <style scoped>

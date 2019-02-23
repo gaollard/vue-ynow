@@ -8,9 +8,9 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import Component from 'vue-class-component'
-import { Swipe, SwipeItem } from 'vant'
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import { Swipe, SwipeItem } from 'vant';
 
 @Component({
   components: {
@@ -19,7 +19,7 @@ import { Swipe, SwipeItem } from 'vant'
   }
 })
 export default class WelcomeView extends Vue {
-}
+};
 </script>
 
 <style lang="scss" scoped>

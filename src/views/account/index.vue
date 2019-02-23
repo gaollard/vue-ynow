@@ -30,6 +30,7 @@
       <van-cell title="我的收藏" to="/collect"/>
       <van-cell title="我的喜欢" to="/"/>
       <van-cell title="账户设置" to="/userInfo"/>
+      <van-cell title="立即登录" to="/login"/>
     </div>
   </div>
 </template>

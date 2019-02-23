@@ -25,16 +25,16 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import { NavBar } from 'vant'
-import ynowApi from '../../api/ynow'
-Vue.use(NavBar)
+import Vue from 'vue';
+import { NavBar } from 'vant';
+import ynowApi from '../../api/ynow';
+Vue.use(NavBar);
 
 export default {
   data () {
     return {
       list: []
-    }
+    };
   },
   mounted () {
     this.doGetXzProductCollect();
@@ -54,7 +54,7 @@ export default {
       });
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

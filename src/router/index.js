@@ -2,7 +2,6 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import Account from '../views/account';
-import Product from '../views/product';
 import DeliveryAddress from '../views/deliveryAddress';
 import Demand from '../views/demand';
 const Login = () => import('../views/login/index.vue');
@@ -43,11 +42,6 @@ export default new Router({
       path: '/Demand',
       name: 'Demand',
       component: Demand
-    },
-    {
-      path: '/Product',
-      name: 'Product',
-      component: Product
     },
     {
       path: '/Login',

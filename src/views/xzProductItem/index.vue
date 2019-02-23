@@ -48,10 +48,10 @@
 </template>
 
 <script>
-import ynowApi from '../../api/ynow'
-import { Swipe, SwipeItem } from 'vant'
-import { swiper, swiperSlide } from 'vue-awesome-swiper'
-import 'swiper/dist/css/swiper.css'
+import ynowApi from '../../api/ynow';
+import { Swipe, SwipeItem } from 'vant';
+import { swiper, swiperSlide } from 'vue-awesome-swiper';
+import 'swiper/dist/css/swiper.css';
 
 export default {
   components: {
@@ -70,24 +70,24 @@ export default {
           el: '.swiper-pagination'
         }
       }
-    }
+    };
   },
   mounted () {
     ynowApi.getXzProductItem(this.$route.params.itemId).then(res => {
-      this.itemInfo = res.data
-    })
+      this.itemInfo = res.data;
+    });
   },
   methods: {
     onSwipeIndexChange (index) {
-      this.current = index
+      this.current = index;
     },
     doCreateCollet () {
       ynowApi.createXzProductCollect({ itemId: this.$route.params.itemId }).then(res => {
         console.log(res);
-      })
+      });
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

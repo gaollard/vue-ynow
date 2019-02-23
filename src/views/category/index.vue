@@ -16,25 +16,25 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import { Loading } from 'vant'
-import ynowApi from '../../api/ynow'
-Vue.use(Loading)
+import Vue from 'vue';
+import { Loading } from 'vant';
+import ynowApi from '../../api/ynow';
+Vue.use(Loading);
 
 export default {
   data () {
     return {
       list: []
-    }
+    };
   },
   mounted () {
     ynowApi.getXzCategorytList().then(res => {
       setTimeout(() => {
-        this.list = res.data.list
-      }, 500)
-    })
+        this.list = res.data.list;
+      }, 500);
+    });
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

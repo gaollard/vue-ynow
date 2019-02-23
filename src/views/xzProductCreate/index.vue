@@ -16,6 +16,7 @@
         <div class="preview-box" v-for="(item, index) in pickList" :key="index" >
           <img class="pre-item" :src="item.content"/>
           <div @click="removeItem(index)">
+            <div>%{{ item.percent }}</div>
             <img class="icon-remove" src="./img/remove.png" alt="图片">
           </div>
         </div>
@@ -30,13 +31,15 @@
         <van-switch v-model="checked"/>
       </van-cell>
     </div>
+    <van-button class="btm-fixed" size="large" type="primary" @click="doCreateProduct">提交</van-button>
   </div>
 </template>
 
 <script>
 import Vue from 'vue';
-import { Field, NavBar, Switch, Cell, CellGroup, Uploader } from 'vant';
-import ynowApi from '../../api/ynow'
+import { Field, NavBar, Switch, Cell, CellGroup, Uploader, Toast, Button } from 'vant';
+import ynowApi from '../../api/ynow';
+import * as qiniu from 'qiniu-js';
 
 Vue
   .use(NavBar)
@@ -44,6 +47,7 @@ Vue
   .use(Switch)
   .use(Cell)
   .use(CellGroup)
+  .use(Button)
   .use(Uploader);
 
 export default {
@@ -57,18 +61,56 @@ export default {
         description: '转让iphone6Splus64g 转让闲置iphone6splus64g玫瑰金！成色跟新机差不多！前后贴膜一直带后壳使',
         depreciation: '9成新'
       },
-      pickList: []
-    }
+      pickList: [],
+      token: ''
+    };
+  },
+  mounted () {
+    this.doGet7nToken();
   },
   methods: {
-    onRead(file) {
+    onRead (file) {
       this.pickList.push(file);
+      this.uploadImg(this.pickList.length - 1, file.file);
     },
     removeItem (index) {
       this.pickList.splice(index, 1);
+    },
+    doGet7nToken () {
+      ynowApi.get7nToken().then(res => {
+        this.token = res.data.token;
+      });
+    },
+    uploadImg (index, file, callback) {
+      const vm = this;
+      const observable = qiniu.upload(file, file.name, this.token, { }, { });
+      observable.subscribe({
+        next (res) {
+          vm.pickList[index]['percent'] = res.total.percent;
+          vm.pickList = [].concat(vm.pickList);
+        },
+        error (error) {
+          console.log(error);
+          Toast(error);
+        },
+        complete (res) {
+          vm.pickList[index]['url'] = `//c1.airtlab.com/${res.key}`;
+          vm.pickList = [].concat(vm.pickList);
+        }
+      });
+    },
+    doCreateProduct () {
+      let imgs = this.pickList.map(element => element.url);
+      imgs = JSON.stringify(imgs);
+      const params = Object.assign({
+        imgs
+      }, this.form);
+      ynowApi.createXzProduct(params).then(res => {
+        Toast('上传成功');
+      });
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -80,7 +122,7 @@ export default {
     float: right;
     width: 80px;
     height: 80px;
-    margin-left: 10px;
+    margin-right: 10px;
     margin-bottom: 10px;
     border: 1px solid #eee;
   }
@@ -102,5 +144,10 @@ export default {
   .preview-box {
     float: right;
   }
+}
+
+.btm-fixed {
+  position: absolute;
+  bottom: 0;
 }
 </style>

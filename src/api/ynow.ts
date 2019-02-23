@@ -2,6 +2,9 @@ import { host } from '../config'
 import http from '../utils/http'
 
 export default {
+  get7nToken () {
+    return http.get(`${host}/upload/getToken`);
+  },
   // 登录
   login({ mobile, password }) {
     return http.post(`${host}/user/login`, { mobile, password });
@@ -41,6 +44,9 @@ export default {
   // 获取闲置商品详情
   getXzProductItem(itemId) {
     return http.get(`${host}/xzProduct/${itemId}`);
+  },
+  createXzProduct(params) {
+    return http.post(`${host}/xzProduct/`, params);
   },
   // 获取闲置商品分类
   getXzCategorytList() {

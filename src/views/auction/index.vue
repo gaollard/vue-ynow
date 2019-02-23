@@ -37,7 +37,7 @@ export default {
     ynowApi.getXzProductList().then(res => {
     });
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

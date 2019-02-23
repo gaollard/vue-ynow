@@ -16,12 +16,12 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import Component from 'vue-class-component'
-import ynowApi from '../../api/ynow'
-import { Field } from 'vant'
-import cookies from 'js-cookie'
-import store from 'store'
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import ynowApi from '../../api/ynow';
+import { Field } from 'vant';
+import cookies from 'js-cookie';
+import store from 'store';
 
 @Component({
   components: {
@@ -29,23 +29,23 @@ import store from 'store'
   }
 })
 export default class AccountView extends Vue {
-  userInfo = null
-  mobile = '18620343136'
-  password = '199389'
-  loading = false
+  userInfo = null;
+  mobile = '18620343136';
+  password = '199389';
+  loading = false;
 
   async handleClick () {
-    this.loading = true
+    this.loading = true;
     ynowApi.login({
       mobile: this.mobile,
       password: this.password
     }).then(res => {
-      cookies.set('token', res.data.token)
-      store.set('userInfo', res.data)
-      this.$router.go(-1)
-    })
+      cookies.set('token', res.data.token);
+      store.set('userInfo', res.data);
+      this.$router.go(-1);
+    });
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

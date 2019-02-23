@@ -6,16 +6,19 @@
         v-for="(item, index) in list"
         :key="index"
         :to="'/xzProductItem/'+item.id"
+        v-if="item.imgs && item.imgs.length"
       >
-        <div class="p-img" :style="{backgroundImage: 'url(' + item.imgs[0] + ')'}"></div>
-        <div class="p-info">
-          <p class="p-name">{{ item.name }}</p>
-          <p class="p-price">￥{{ item.price / 100 }}</p>
-        </div>
-        <div class="line"></div>
-        <div class="user-info">
-          <span class="p-username">Gaollard</span>
-          <span class="p-credit">信用良好</span>
+        <div>
+          <div class="p-img" :style="{backgroundImage: 'url(' + item.imgs[0] + ')'}"></div>
+          <div class="p-info">
+            <p class="p-name">{{ item.name }}</p>
+            <p class="p-price">￥{{ item.price / 100 }}</p>
+          </div>
+          <div class="line"></div>
+          <div class="user-info">
+            <span class="p-username">Gaollard</span>
+            <span class="p-credit">信用良好</span>
+          </div>
         </div>
       </router-link>
     </div>
@@ -23,19 +26,19 @@
 </template>
 
 <script>
-import ynowApi from '../../api/ynow'
+import ynowApi from '../../api/ynow';
 export default {
   data () {
     return {
       list: []
-    }
+    };
   },
   mounted () {
     ynowApi.getXzProductList().then(res => {
-      this.list = res.data.list
-    })
+      this.list = res.data.list;
+    });
   }
-}
+};
 </script>
 
 <style scoped>
