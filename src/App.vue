@@ -1,9 +1,10 @@
 <template>
   <div id="app">
-    <van-tabbar class="tabbar" v-show="$route.meta.tabbar">
+    <van-tabbar class="tabbar" v-show="$route.meta.tabbar" v-model="activeIndex" @change="handleChange">
       <!-- icon="home-o"  -->
       <van-tabbar-item to="/">闲鸭</van-tabbar-item>
       <!-- icon="bar-chart-o"  -->
+      <van-tabbar-item to="/category">分类</van-tabbar-item>
       <van-tabbar-item to="/auction">竞拍</van-tabbar-item>
       <!-- icon="chat-o"  -->
       <van-tabbar-item info="5" to="/news">消息</van-tabbar-item>
@@ -15,18 +16,23 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import Navbar from './components/navbar/index.vue'
-import { Tabbar, TabbarItem } from 'vant'
-
-Vue.use(Tabbar).use(TabbarItem)
+import Vue from 'vue';
+import { Tabbar, TabbarItem } from 'vant';
+Vue.use(Tabbar).use(TabbarItem);
 
 export default {
   name: 'App',
-  components: {
-    Navbar
+  data () {
+    return {
+      activeIndex: 0
+    };
+  },
+  methods: {
+    handleChange (index) {
+      this.activeIndex = index;
+    }
   }
-}
+};
 </script>
 
 <style scoped>

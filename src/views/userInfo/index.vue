@@ -2,28 +2,29 @@
   <div>
     <van-nav-bar
       title="我的资料"
-      left-arrow
+      left-text="返回"
       @click-left="onClickLeft"
-      @click-right="onClickRight"
     />
-    <van-cell-group>
-      <van-cell title="头像" value="无" is-link/>
-      <van-cell title="昵称" :value="userInfo.nickname" is-link/>
-      <van-cell title="背景图" value="无" is-link/>
-      <van-cell title="性别" :value="userInfo.gender==1?'男':'女'" is-link/>
-      <van-cell title="手机号码" :value="userInfo.mobile" is-link/>
-      <van-cell title="电子邮箱" :value="userInfo.email" is-link/>
-      <van-cell title="QQ绑定" value="无" is-link/>
-      <van-cell title="微信绑定" value="无" is-link/>
-    </van-cell-group>
+    <div class="content">
+      <van-cell-group>
+        <van-cell title="头像" value="无"/>
+        <van-cell title="昵称" :value="userInfo.nickname"/>
+        <van-cell title="背景图" value="无"/>
+        <van-cell title="性别" :value="userInfo.gender==1?'男':'女'"/>
+        <van-cell title="手机号码" :value="userInfo.mobile"/>
+        <van-cell title="电子邮箱" :value="userInfo.email"/>
+        <van-cell title="QQ绑定" value="无"/>
+        <van-cell title="微信绑定" value="无"/>
+      </van-cell-group>
+    </div>
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
-import { NavBar, Toast, Cell, CellGroup } from 'vant'
+import { NavBar } from 'vant'
 import ynowApi from '../../api/ynow'
-Vue.use(NavBar).use(Cell).use(CellGroup)
+Vue.use(NavBar)
 
 export default {
   data () {
@@ -33,10 +34,7 @@ export default {
   },
   methods: {
     onClickLeft () {
-      Toast('返回')
-    },
-    onClickRight () {
-      Toast('按钮')
+      this.$router.go(-1)
     }
   },
   mounted () {
@@ -47,6 +45,6 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+/* .content /deep/  */
 </style>

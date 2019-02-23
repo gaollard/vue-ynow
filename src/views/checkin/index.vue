@@ -1,5 +1,9 @@
 <template>
-  <div class="view-checkin">
+  <div class="view">
+    <van-nav-bar
+      title="我的资料"
+      @click-left="onClickLeft"
+    />
     <ul class="list">
       <li class="item" v-for="(item, index) in list" :key="index">{{ item.date.substr(0, 10) }}</li>
     </ul>
@@ -8,27 +12,36 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import Component from 'vue-class-component'
+import { NavBar } from 'vant'
 import ynowApi from '../../api/ynow'
+Vue.use(NavBar)
 
-@Component
-export default class AccountView extends Vue {
-  list = []
+export default {
+  data () {
+    return {
+      list: []
+    }
+  },
   mounted () {
     ynowApi.getCheckinList().then(res => {
       this.list = res.data.list
     })
+  },
+  methods: {
+    onClickLeft () {
+      this.$router.go(-1);
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.view-checkin {
-  min-height: 100vh;
+.view {
   background: #eee;
 }
 .list {
   overflow: hidden;
+  padding: 12px;
 }
 .item {
   padding: 12px;

@@ -1,17 +1,16 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
+import Vue from 'vue';
+import App from './App.vue';
+import router from './router';
 
-import Vant from 'vant'
-import 'vant/lib/index.css'
-Vue.use(Vant)
+import { Cell, NavBar, CellGroup, Tabbar, TabbarItem } from 'vant';
+Vue.use(Cell).use(NavBar).use(CellGroup).use(Tabbar).use(TabbarItem);
 
-import './style/base.scss'
-import './style/cover.scss'
+import './style/base.scss';
+import './style/cover.scss';
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
 new Vue({
@@ -19,4 +18,4 @@ new Vue({
   router,
   components: { App },
   template: '<App/>'
-}).$mount('#app')
+}).$mount('#app');

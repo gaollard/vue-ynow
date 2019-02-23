@@ -5,8 +5,12 @@ import cookies from 'js-cookie'
 axios.interceptors.request.use(function (config) {
   const token = cookies.get('token') || ''
   config.url = `${config.url}?token=${token}`
-  if (config.method === 'POST') {
+
+  if (!config.data) config.data = {}
+  console.log(config)
+  if (config.method === 'post') {
     config.data = qs.stringify(config.data)
+    config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
   }
   return config
 }, function (error) {

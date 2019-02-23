@@ -26,17 +26,16 @@
 </template>
 
 <script>
-import ynowApi from '../../api/ynow'
+import ynowApi from '../../api/ynow';
 export default {
   data () {
     return {
       list: []
-    }
+    };
   },
   mounted () {
     ynowApi.getXzProductList().then(res => {
-      // this.list = res.data.list
-    })
+    });
   }
 }
 </script>

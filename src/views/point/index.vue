@@ -1,27 +1,43 @@
 <template>
   <div class="view-point">
-    <ul class="list">
-      <li class="item" v-for="(item, index) in list" :key="index">
-        <div class="item-date">{{ item.createTime.substr(0, 10) }}</div>
-        <div class="item-value" :class="{'is-negative': !item.action}">{{ item.action ? '+' : '-' }}{{ item.value }}</div>
-        <div class="item-desc">{{ item.description }}</div>
-      </li>
-    </ul>
+    <van-nav-bar
+      title="我的资料"
+      @click-left="onClickLeft"
+      @click-right="onClickRight"
+    />
+    <div class="content">
+      <ul class="list">
+        <li class="item" v-for="(item, index) in list" :key="index">
+          <div class="item-date">{{ item.createTime.substr(0, 10) }}</div>
+          <div class="item-value" :class="{'is-negative': !item.action}">{{ item.action ? '+' : '-' }}{{ item.value }}</div>
+          <div class="item-desc">{{ item.description }}</div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue'
-import Component from 'vue-class-component'
+import { NavBar } from 'vant'
 import ynowApi from '../../api/ynow'
+Vue.use(NavBar)
 
-@Component
-export default class AccountView extends Vue {
-  list = []
+export default {
+  data () {
+    return {
+      list: []
+    }
+  },
   mounted () {
     ynowApi.getPointList().then(res => {
       this.list = res.data.list
     })
+  },
+  methods: {
+    onClickLeft () {
+      this.$router.go(-1);
+    }
   }
 }
 </script>
@@ -38,6 +54,7 @@ export default class AccountView extends Vue {
   padding: 6px 12px;
   margin-bottom: 10px;
   background: #fff;
+  border-radius: 4px;
 }
 .item-date {
   font-size: 14px;
@@ -57,5 +74,9 @@ export default class AccountView extends Vue {
   margin-top: 4px;
   margin-bottom: 4px;
   color: #666;
+}
+
+.content {
+  padding: 12px;
 }
 </style>

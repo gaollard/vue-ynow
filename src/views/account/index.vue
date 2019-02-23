@@ -7,9 +7,9 @@
           <div class="nickname">{{ userInfo.nickname }}</div>
           <div class="mobile">{{ userInfo.mobile }}</div>
         </div>
-        <div class="btn-set" @click="$router.push('/userInfo')">账户设置</div>
+        <!-- <div class="btn-set" @click="$router.push('/userInfo')">账户设置</div> -->
         <div class="btn-checkin">
-          <span>{{ checkinStatus ? '已签到' : '签到' }}</span>
+          <span @click="handleCheckin">{{ checkinStatus ? '已签到' : '签到' }}</span>
         </div>
       </template>
       <template v-else>
@@ -26,32 +26,50 @@
     <div class="card-link">
       <van-cell title="地址管理" to="/DeliveryAddress"/>
       <van-cell title="我的发布" to="/"/>
-      <van-cell title="我的收藏" to="/"/>
+      <van-cell title="我的收藏" to="/collect"/>
       <van-cell title="我的喜欢" to="/"/>
+      <van-cell title="账户设置" to="/userInfo"/>
       <van-cell title="立即登录" to="/login"/>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import Component from 'vue-class-component'
-import ynowApi from '../../api/ynow'
+import ynowApi from '../../api/ynow';
 
-@Component
-export default class AccountView extends Vue {
-  userInfo = null
-  checkinStatus = true
-
+export default {
+  data () {
+    return {
+      userInfo: null,
+      checkinStatus: true
+    };
+  },
   mounted () {
-    ynowApi.getUserInfo().then(res => {
-      this.userInfo = res.data
-    })
-    ynowApi.getCheckinStatus().then(res => {
-      this.checkinStatus = res.data.status === 1
-    })
+    this.doGetUserInfo();
+    this.doGetCheckInStatus();
+  },
+  methods: {
+    doGetCheckInStatus () {
+      ynowApi.getCheckinStatus().then(res => {
+        this.checkinStatus = res.data.status === 1;
+      });
+    },
+    doGetUserInfo () {
+      ynowApi.getUserInfo().then(res => {
+        this.userInfo = res.data;
+      });
+    },
+    handleCheckin () {
+      if (!this.checkinStatus) {
+        ynowApi.checkin().then(res => {
+          this.doGetCheckInStatus();
+        });
+      } else {
+        this.$router.push('/checkin');
+      }
+    }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -66,8 +84,7 @@ export default class AccountView extends Vue {
   height: 160px;
   padding: 15px;
   color: #fff;
-  background: #607d8b;
-  background: url(http://mstaticc.xianghuanji.com/react/_next/static/images/topbg1-7d30d227cde19cd9af765d3a7ded9ad8.png);
+  background: #292727;
   background-size: 100%;
   box-sizing: border-box;
   .avatar {
@@ -98,8 +115,8 @@ export default class AccountView extends Vue {
   }
   .btn-checkin {
     position: absolute;
-    top: 100px;
-    right: 10px;
+    top: 70px;
+    right: 20px;
     font-size: 14px;
     line-height: 20px;
     padding: 5px 8px;

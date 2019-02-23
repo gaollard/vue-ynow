@@ -1,8 +1,18 @@
-.van-button--large {
-  height: 44px;
-  line-height: 42px;
-}
+#app {
+  .view {
+    min-height: 100vh;
+  }
 
-.view {
-  min-height: 100vh;
+  .van-button--large {
+    height: 44px;
+    line-height: 42px;
+  }
+
+  .van-nav-bar {
+    color: #fff;
+    background-color: #F44336;
+    .van-nav-bar__title {
+      color: #fff;
+    }
+  }
 }

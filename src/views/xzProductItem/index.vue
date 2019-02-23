@@ -17,11 +17,14 @@
       <div class="line"></div>
       <div class="userInfo">
         <div class="avatar-wrap">
-          <img src="//img.alicdn.com/imgextra/i2/2371776744/TB2Iu5CXc4IxuRkSS2eXXcguVXa_!!2371776744.jpg_760x760Q50s50.jpg_.webp">
+          <img :src="itemInfo.user.avatar">
         </div>
         <div>
-          <div class="username">笨猪就是你啦</div>
-          <div class="remark">诚信做人呀～</div>
+          <div class="username">{{ itemInfo.user.nickname }}</div>
+          <div class="remark">
+            <span>{{ itemInfo.user.college }}</span>
+            <span>{{ itemInfo.user.residence }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -38,7 +41,7 @@
         <span>留言</span>
       </div>
       <div>
-        <span>收藏</span>
+        <span @click="doCreateCollet">收藏</span>
       </div>
     </div>
   </div>
@@ -77,6 +80,11 @@ export default {
   methods: {
     onSwipeIndexChange (index) {
       this.current = index
+    },
+    doCreateCollet () {
+      ynowApi.createXzProductCollect({ itemId: this.$route.params.itemId }).then(res => {
+        console.log(res);
+      })
     }
   }
 }
@@ -158,14 +166,17 @@ export default {
   }
   .avatar-wrap img {
     display: block;
-    width: 35px;
-    height: 35px;
+    width: 38px;
+    height: 38px;
     border-radius: 4px;
   }
   .username {
     font-size: 13px;
     font-weight: 600;
     color: #000;
+  }
+  .remark {
+    margin-top: 2px;
   }
 }
 
