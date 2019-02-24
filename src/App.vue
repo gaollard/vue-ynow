@@ -1,15 +1,11 @@
 <template>
   <div id="app">
     <van-tabbar class="tabbar" v-show="$route.meta.tabbar" v-model="activeIndex" @change="handleChange">
-      <!-- icon="home-o"  -->
-      <van-tabbar-item to="/">闲鸭</van-tabbar-item>
-      <!-- icon="bar-chart-o"  -->
-      <van-tabbar-item to="/category">分类</van-tabbar-item>
-      <van-tabbar-item to="/auction">竞拍</van-tabbar-item>
-      <!-- icon="chat-o"  -->
-      <van-tabbar-item info="5" to="/news">消息</van-tabbar-item>
-      <!-- icon="manager-o"  -->
-      <van-tabbar-item to="/account">我的</van-tabbar-item>
+      <van-tabbar-item icon="home-o" to="/">闲鸭</van-tabbar-item>
+      <van-tabbar-item icon="apps-o" to="/category">分类</van-tabbar-item>
+      <van-tabbar-item icon="fire-o" to="/auction">竞拍</van-tabbar-item>
+      <van-tabbar-item info="5" icon="chat-o" to="/news">消息</van-tabbar-item>
+      <van-tabbar-item icon="manager-o" to="/account">我的</van-tabbar-item>
     </van-tabbar>
     <router-view class="view" :class="{'has-tabbar': $route.meta.tabbar}"/>
   </div>
