@@ -60,5 +60,8 @@ export default {
   },
   deleteXzProductCollect(recordId) {
     return http.delete(`${host}/xzProductCollect/${recordId}`);
+  },
+  getXzProductCollectState ({ itemId }) {
+    return http.get(`${host}/user/xzProductCollectState/${itemId}`);
   }
 };

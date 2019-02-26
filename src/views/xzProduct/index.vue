@@ -16,8 +16,8 @@
           </div>
           <div class="line"></div>
           <div class="user-info">
-            <span class="p-username">Gaollard</span>
-            <span class="p-credit">信用良好</span>
+            <span class="p-username">{{ item.userInfo.nickname }}</span>
+            <span class="p-credit">{{ item.userInfo.residence }}</span>
           </div>
         </div>
       </router-link>

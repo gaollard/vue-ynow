@@ -41,7 +41,7 @@
         <span>留言</span>
       </div>
       <div>
-        <span @click="doCreateCollet">收藏</span>
+        <span @click="doCreateCollet" :class="{'is-active': isCollected}">{{ isCollected ? '已收藏' : '收藏'}}</span>
       </div>
     </div>
   </div>
@@ -63,6 +63,7 @@ export default {
   data () {
     return {
       itemInfo: null,
+      isCollected: false,
       current: 0,
       swiperOption: {
         loop: true,
@@ -76,6 +77,11 @@ export default {
     ynowApi.getXzProductItem(this.$route.params.itemId).then(res => {
       this.itemInfo = res.data;
     });
+    ynowApi.getXzProductCollectState({ itemId: this.$route.params.itemId }).then(res => {
+      this.isCollected = res.data.status === 1;
+    }).catch(err => {
+      console.log(err);
+    })
   },
   methods: {
     onSwipeIndexChange (index) {
@@ -203,8 +209,16 @@ export default {
   height: 50px;
   padding: 0 10px;
   font-size: 12px;
+  line-height: 20px;
   > div {
     margin-right: 10px;
+  }
+  .is-active {
+    display: inline-block;
+    padding: 2px 4px;
+    border-radius: 2px;
+    color: #fff;
+    background-color: #ffc107;
   }
 }
 </style>
