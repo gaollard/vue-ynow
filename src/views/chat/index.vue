@@ -1,15 +1,13 @@
 <template>
   <div class="view">
-    <div class="list" v-if="sortData">
-      <template v-for="pitem in sortData">
-        <div class="item" v-for="item in pitem" :key="item.id" @click="$router.push('/chatItem/'+item.id)">
-          <img class="item-avatar" :src="item.avatar" alt="头像">
-          <div>
-            <div class="item-name">{{ item.nickname }}</div>
-            <div class="item-msg">hello</div>
-          </div>
+    <div class="list">
+      <div class="item" v-for="item in userList" :key="item.id" @click="$router.push('/chatItem/'+item.id)">
+        <img class="item-avatar" :src="item.avatar" alt="头像">
+        <div>
+          <div class="item-name">{{ item.nickname }}</div>
+          <div class="item-msg" v-text="getLastMsg(item)"></div>
         </div>
-      </template>
+      </div>
     </div>
   </div>
 </template>
@@ -17,38 +15,44 @@
 <script>
 import ynowApi from '../../api/ynow';
 import store from 'store';
+const userInfo = store.get('userInfo');
 
 export default {
   data () {
     return {
       userList: [],
       msgList: [],
-      sortData: null
+      sortData: null,
+      msgObj: null
     };
   },
   mounted () {
     this.doGetChatList();
   },
   methods: {
+    getMsgKey (user) {
+      return `${userInfo.id}_${user.id}`;
+    },
+    getLastMsg (user) {
+      const key = this.getMsgKey(user);
+      return this.msgObj[key][0]['content'];
+    },
     doGetChatList () {
-      const userInfo = store.get('userInfo');
-
       ynowApi.getChatList().then(res => {
-        this.msgList = res.data.msgList;
-        this.userList = res.data.userList;
-
+        const msgList = res.data.msgList;
+        const userList = res.data.userList;
         const obj = {};
-        this.userList.forEach(element => {
-          const key = `${userInfo.id}_${element.id}`;
+
+        userList.forEach(user => {
+          const key = this.getMsgKey(user);
           obj[key] = [];
         });
 
         const keys = Object.keys(obj);
 
-        this.msgList.forEach(element => {
+        msgList.forEach(element => {
           const key1 = `${element.from}_${element.to}`;
           const key2 = `${element.to}_${element.from}`;
-
           keys.forEach(key => {
             if (key === key1 || key === key2) {
               obj[key].push(element);
@@ -57,32 +61,30 @@ export default {
         });
 
         let values = Object.values(obj);
-        values.forEach(element => {
-          element.sort((a, b) => {
-            const flag = b['create_time'] > a['create_time'];
-            if (b['create_time'] > a['create_time']) {
-              return 1;
-            } else if (b['create_time'] === a['create_time']) {
-              return 0;
-            } else {
-              return -1;
-            }
-          });
-        });
 
-        values.sort((a, b) => {
-          const flag = b[0]['create_time'] > a[0]['create_time'];
-          if (b[0]['create_time'] > a[0]['create_time']) {
+        function chatCompare (chatA, chatB) {
+          if (chatB.create_time > chatA.create_time) {
             return 1;
-          } else if (b[0]['create_time'] === a[0]['create_time']) {
+          } else if (chatB.create_time === chatA.create_time) {
             return 0;
           } else {
             return -1;
           }
+        }
+
+        values.forEach(element => {
+          element.sort(chatCompare);
         });
 
-        this.sortData = values;
-        // console.log(values);
+        userList.sort((a, b) => {
+          const keya = `${userInfo.id}_${a.id}`;
+          const keyb = `${userInfo.id}_${b.id}`;
+          return chatCompare(obj[keya][0], obj[keyb][0]);
+        });
+
+        this.msgObj = obj;
+        this.msgList = msgList;
+        this.userList = userList;
       });
     }
   }
