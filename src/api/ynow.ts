@@ -2,7 +2,7 @@ import { host } from '../config'
 import http from '../utils/http'
 
 export default {
-  get7nToken () {
+  get7nToken() {
     return http.get(`${host}/upload/getToken`);
   },
   // 登录
@@ -52,16 +52,32 @@ export default {
   getXzCategorytList() {
     return http.get(`${host}/xzCategory`);
   },
-  getXzProductCollect() {
-    return http.get(`${host}/xzProductCollect`);
+  /**
+   *
+   * @param param0 typeId = 1 收藏, typeId = 2 喜欢
+   */
+  getXzProductCollect({ typeId = 1 }) {
+    return http.get(`${host}/xzProductCollect?typeId=${typeId}`);
   },
-  createXzProductCollect({ itemId }) {
-    return http.post(`${host}/xzProductCollect`, { itemId });
+  // 添加 收藏/喜欢
+  createXzProductCollect({ itemId, typeId = 1 }) {
+    return http.post(`${host}/xzProductCollect?typeId=${typeId}`, {
+      itemId
+    });
   },
-  deleteXzProductCollect(recordId) {
-    return http.delete(`${host}/xzProductCollect/${recordId}`);
+  // 删除 收藏/喜欢
+  deleteXzProductCollect({ recordId, itemId, typeId = 1 }) {
+    return http.delete(
+      `${host}/xzProductCollect/${recordId}?typeId=${typeId}&itemId=${itemId}`
+    );
   },
-  getXzProductCollectState ({ itemId }) {
-    return http.get(`${host}/user/xzProductCollectState/${itemId}`);
-  }
+  // 收藏/喜欢 状态查询
+  getXzProductCollectState({ itemId, typeId = 1 }) {
+    return http.get(
+      `${host}/user/xzProductCollectState/${itemId}?typeId=${typeId}`
+    );
+  },
+  getChatList () {
+    return http.get(`${host}/chat`);
+  } 
 };

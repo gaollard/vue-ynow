@@ -3,6 +3,7 @@
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
+import store from './store';
 
 import {
   Cell,
@@ -11,17 +12,18 @@ import {
   Tabbar,
   TabbarItem,
   Field,
-  Switch
+  Switch,
+  Icon
 } from 'vant';
 
-Vue
-  .use(Cell)
+Vue.use(Cell)
   .use(NavBar)
   .use(CellGroup)
   .use(Tabbar)
   .use(TabbarItem)
   .use(Field)
   .use(Switch)
+  .use(Icon);
 
 import './style/base.scss';
 import './style/cover.scss';
@@ -31,6 +33,7 @@ Vue.config.productionTip = false;
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  store,
   router,
   components: { App },
   template: '<App/>'

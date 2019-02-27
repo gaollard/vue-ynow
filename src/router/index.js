@@ -87,7 +87,10 @@ export default new Router({
       // 闲置商品详情页面
       path: '/auction',
       name: 'auction',
-      component: () => import('../views/auction')
+      component: () => import('../views/auction'),
+      meta: {
+        tabbar: true
+      }
     },
     {
       // 用户信息
@@ -106,6 +109,21 @@ export default new Router({
       path: '/xzProductCreate',
       name: 'xzProductCreate',
       component: () => import('../views/xzProductCreate')
+    },
+    {
+      // 我的收藏
+      path: '/chat',
+      name: 'chat',
+      component: () => import('../views/chat'),
+      meta: {
+        tabbar: true
+      }
+    },
+    {
+      // 我的收藏
+      path: '/chatItem/:uid',
+      name: 'chatItem',
+      component: () => import('../views/chatItem')
     }
   ]
 });
