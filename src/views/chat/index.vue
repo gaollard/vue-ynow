@@ -1,31 +1,88 @@
 <template>
   <div class="view">
-    <u class="list">
-      <li class="item" v-for="item in userList" :key="item.id">
-        <img class="item-avatar" :src="item.avatar" alt="头像">
-      </li>
-    </u>
+    <div class="list" v-if="sortData">
+      <template v-for="pitem in sortData">
+        <div class="item" v-for="item in pitem" :key="item.id" @click="$router.push('/chatItem/'+item.id)">
+          <img class="item-avatar" :src="item.avatar" alt="头像">
+          <div>
+            <div class="item-name">{{ item.nickname }}</div>
+            <div class="item-msg">hello</div>
+          </div>
+        </div>
+      </template>
+    </div>
   </div>
 </template>
 
 <script>
-import ynowApi from '../../api/ynow'
-const data = `{"retCode":"0","errCode":"0","errMsg":"","data":{"msgList":[{"id":1,"from":1,"to":"2","content":"Hello","red":null,"create_time":null},{"id":2,"from":1,"to":"2","content":"hello world","red":null,"create_time":null},{"id":3,"from":1,"to":"3","content":"你好！","red":null,"create_time":"2019-02-27T09:23:19.000Z"}],"userList":[{"id":2,"nickname":"Miss结蕊香","avatar":"//img.alicdn.com/bao/uploaded/i4/196993935/O1CN01tf5NH41ewH0sKWjRt_!!0-item_pic.jpg","gender":0,"mobile":"13249064450","email":"1046614584@qq.com","password":"123456","create_time":"2019-01-10T01:31:31.000Z","login_time":"0000-00-00 00:00:00","college":"遵义医学院","words":null,"residence":"广东珠海金湾区"},{"id":3,"nickname":"从此天涯路人","avatar":"//img.alicdn.com/bao/uploaded/i4/196993935/O1CN01tf5NH41ewH0sKWjRt_!!0-item_pic.jpg","gender":0,"mobile":"17688193136","email":"1296674455@qq.com","password":"123456","create_time":"2019-01-10T14:03:32.000Z","login_time":"0000-00-00 00:00:00","college":"中山大学","words":null,"residence":"广东广州羊城区"}]}}`;
+import ynowApi from '../../api/ynow';
+import store from 'store';
+
 export default {
   data () {
     return {
-      userList: []
+      userList: [],
+      msgList: [],
+      sortData: null
     };
   },
   mounted () {
-    // this.doGetChatList();
-    this.userList = JSON.parse(data).data.userList;
+    this.doGetChatList();
   },
   methods: {
     doGetChatList () {
+      const userInfo = store.get('userInfo');
+
       ynowApi.getChatList().then(res => {
-        console.log(res);
+        this.msgList = res.data.msgList;
         this.userList = res.data.userList;
+
+        const obj = {};
+        this.userList.forEach(element => {
+          const key = `${userInfo.id}_${element.id}`;
+          obj[key] = [];
+        });
+
+        const keys = Object.keys(obj);
+
+        this.msgList.forEach(element => {
+          const key1 = `${element.from}_${element.to}`;
+          const key2 = `${element.to}_${element.from}`;
+
+          keys.forEach(key => {
+            if (key === key1 || key === key2) {
+              obj[key].push(element);
+            }
+          })
+        });
+
+        let values = Object.values(obj);
+        values.forEach(element => {
+          element.sort((a, b) => {
+            const flag = b['create_time'] > a['create_time'];
+            if (b['create_time'] > a['create_time']) {
+              return 1;
+            } else if (b['create_time'] === a['create_time']) {
+              return 0;
+            } else {
+              return -1;
+            }
+          });
+        });
+
+        values.sort((a, b) => {
+          const flag = b[0]['create_time'] > a[0]['create_time'];
+          if (b[0]['create_time'] > a[0]['create_time']) {
+            return 1;
+          } else if (b[0]['create_time'] === a[0]['create_time']) {
+            return 0;
+          } else {
+            return -1;
+          }
+        });
+
+        this.sortData = values;
+        // console.log(values);
       });
     }
   }
@@ -33,8 +90,33 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.view {
+  background-color: #eee;
+}
+
+.item {
+  display: flex;
+  overflow: hidden;
+  font-size: 12px;
+  padding: 6px 10px;
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+}
+
 .item-avatar {
-  width: 45px;
-  height: 45px;
+  float: left;
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
+  border-radius: 50%;
+}
+
+.item-msg {
+  color: #666;
+}
+
+.item-name {
+  font-size: 13px;
+  margin-bottom: 4px;
 }
 </style>
