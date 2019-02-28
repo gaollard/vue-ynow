@@ -120,7 +120,7 @@ export default {
         }
       }).catch(err => {
         console.log(err);
-      })
+      });
     },
     // 常见收藏
     doCreateCollet (typeId) {
@@ -131,7 +131,7 @@ export default {
       });
     },
     // 删除收藏
-    doDeleteCollect(typeId) {
+    doDeleteCollect (typeId) {
       let data = null;
       if (typeId === 1) {
         data = this.collectData;
@@ -144,7 +144,7 @@ export default {
           Toast(res.errMsg);
         }
         this.doGetXzProductCollectState(typeId);
-      })
+      });
     }
   }
 };

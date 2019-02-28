@@ -19,7 +19,6 @@
 </template>
 
 <script>
-import ynowApi from '../../api/ynow';
 import store from 'store';
 import { mapState } from 'vuex';
 const userInfo = store.get('userInfo');

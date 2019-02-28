@@ -89,8 +89,8 @@ export default {
         const obj = {};
 
         msgList.forEach(element => {
-          let key
-          if (element.f_from == userInfo.id) {
+          let key;
+          if (+element.f_from === +userInfo.id) {
             key = `${userInfo.id}_${element.f_to}`;
           } else {
             key = `${userInfo.id}_${element.f_from}`;
@@ -128,7 +128,6 @@ export default {
         userList.sort((a, b) => {
           const keya = `${userInfo.id}_${a.id}`;
           const keyb = `${userInfo.id}_${b.id}`;
-          console.log(keya, keyb);
           return chatCompare(obj[keya][0], obj[keyb][0]);
         });
 
@@ -137,15 +136,6 @@ export default {
           msgList,
           userList
         });
-
-        function getMsgKey (user) {
-          return `${userInfo.id}_${user.id}`;
-        }
-
-        function getLastMsg (user) {
-          const key = getMsgKey(user);
-          return msgObj[key][0]['content'];
-        }
       });
     },
     sendMsg ({ state, commit }, { to, content }) {

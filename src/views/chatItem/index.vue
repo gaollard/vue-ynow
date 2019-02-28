@@ -32,7 +32,6 @@
 <script>
 import Vue from 'vue';
 import { Field, Button, NavBar } from 'vant';
-import ynowApi from '../../api/ynow';
 import store from 'store';
 import { mapState } from 'vuex';
 const userInfo = store.get('userInfo');

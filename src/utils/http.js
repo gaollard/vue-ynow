@@ -7,7 +7,6 @@ axios.interceptors.request.use(function (config) {
   const token = cookies.get('token') || '';
 
   const url = new Url(config.url, true);
-  console.log(url.query);
   url.query.token = token;
   config.url = url.toString();
 
