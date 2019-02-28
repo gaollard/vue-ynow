@@ -14,7 +14,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Welcome',
+      name: 'welcome',
       component: () => import('../views/xzProduct'),
       meta: {
         tabbar: true
@@ -121,9 +121,14 @@ export default new Router({
     },
     {
       // 我的收藏
-      path: '/chatItem/:uid',
+      path: '/chatItem/:partnerId',
       name: 'chatItem',
       component: () => import('../views/chatItem')
+    },
+    {
+      // 我的收藏
+      path: '*',
+      component: () => import('../views/v404')
     }
   ]
 });

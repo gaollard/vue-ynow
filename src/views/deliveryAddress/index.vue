@@ -3,6 +3,7 @@
    <van-nav-bar
       title="收货地址"
       left-text="返回"
+      left-arrow
       @click-left="onClickLeft"
     />
     <ul class="list">

@@ -3,6 +3,7 @@
     <van-nav-bar
       title="我的资料"
       left-text="返回"
+      left-arrow
       @click-left="onClickLeft"
     />
     <div class="content">

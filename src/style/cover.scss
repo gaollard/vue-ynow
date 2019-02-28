@@ -1,6 +1,7 @@
 #app {
   .view {
     min-height: 100vh;
+    background-color: #e8eef2;
   }
 
   .van-button--large {
@@ -9,10 +10,14 @@
   }
 
   .van-nav-bar {
-    color: #fff;
-    background-color: #F44336;
+    color: #333;
+    background-color: #fff;
     .van-nav-bar__title {
-      color: #fff;
+      color: #333;
+    }
+    .van-nav-bar__text,
+    .van-icon {
+      color: inherit;
     }
   }
 }

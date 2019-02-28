@@ -79,5 +79,8 @@ export default {
   },
   getChatList () {
     return http.get(`${host}/chat`);
-  } 
+  },
+  getChatItem ({ partnerId }) {
+    return http.get(`${host}/chat/${partnerId}`);
+  }
 };

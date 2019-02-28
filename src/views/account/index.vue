@@ -17,21 +17,21 @@
       </template>
     </div>
     <div class="card-menu">
-      <div>收藏</div>
-      <div>关注</div>
-      <div>订单</div>
+      <router-link to="/follow">关注</router-link>
+      <router-link to="/collect">收藏</router-link>
+      <router-link to="/like">喜欢</router-link>
       <router-link to="/point">积分</router-link>
-      <router-link to="/checkin">签到</router-link>
+      <router-link to="/order">订单</router-link>
     </div>
     <div class="card-link">
       <van-cell title="发布宝贝" to="/xzProductCreate"/>
+      <van-cell title="我的发布" to="/myProdcust"/>
       <van-cell title="地址管理" to="/DeliveryAddress"/>
-      <van-cell title="我的发布" to="/"/>
-      <van-cell title="我的收藏" to="/collect"/>
-      <van-cell title="我的喜欢" to="/"/>
       <van-cell title="账户设置" to="/userInfo"/>
       <van-cell title="立即登录" to="/login"/>
     </div>
+
+    <div class="join-us">本站属于EggJS练习，大部分模块正在建设，欢迎你的加入</div>
   </div>
 </template>
 
@@ -52,7 +52,7 @@ export default {
   methods: {
     doGetCheckInStatus () {
       ynowApi.getCheckinStatus().then(res => {
-        this.checkinStatus = res.data.status === 1;
+        this.checkinStatus = +res.data.status === 1;
       });
     },
     doGetUserInfo () {
@@ -64,6 +64,7 @@ export default {
       if (!this.checkinStatus) {
         ynowApi.checkin().then(res => {
           this.doGetCheckInStatus();
+          this.$router.push('/checkin');
         });
       } else {
         this.$router.push('/checkin');
@@ -156,5 +157,12 @@ export default {
     border-bottom: 1px solid #f5f5f5;
     box-sizing: border-box;
   }
+}
+
+.join-us {
+  font-size: 12px;
+  padding-top: 12px;
+  text-align: center;
+  font-weight: bold;
 }
 </style>

@@ -5,12 +5,15 @@
         <van-field v-model="mobile" placeholder="输入手机号码"/>
         <van-field v-model="password" placeholder="输入登录密码" type="password"/>
       </van-cell-group>
+
       <van-button
         class="login-button"
         type="primary"
         size="large"
         :loading="loading"
         @click="handleClick">立即登录</van-button>
+
+      <p class="tip-text">上述账户为测试账户</p>
     </div>
   </div>
 </template>
@@ -19,13 +22,14 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import ynowApi from '../../api/ynow';
-import { Field } from 'vant';
+import { Field, Button } from 'vant';
 import cookies from 'js-cookie';
 import store from 'store';
 
 @Component({
   components: {
-    [Field.name]: Field
+    [Field.name]: Field,
+    [Button.name]: Button
   }
 })
 export default class AccountView extends Vue {
@@ -54,5 +58,10 @@ export default class AccountView extends Vue {
 }
 .login-button {
   margin-top: 20px;
+}
+.tip-text {
+  color: #999;
+  font-size: 14px;
+  margin-top: 10px;
 }
 </style>
