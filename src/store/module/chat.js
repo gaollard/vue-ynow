@@ -1,6 +1,7 @@
 import io from 'socket.io-client';
 import store from 'store';
 import ynowApi from '../../api/ynow';
+import { wsHost } from '../../config';
 
 // browser
 const log = console.log;
@@ -29,7 +30,7 @@ export default {
   actions: {
     // 初始化 socket
     initSocket ({ dispatch }) {
-      const socket = io('ws://127.0.0.1:8001', {
+      const socket = io(wsHost, {
         query: {
           room: 'demo',
           token: userInfo.token || Math.random()
