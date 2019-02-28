@@ -54,6 +54,7 @@ export default {
         socket.on('sendMsg', msg => {
           console.log(msg);
           dispatch('getChatList');
+          dispatch('scrollToLast');
         });
       });
 
@@ -144,10 +145,13 @@ export default {
         content,
         from: userInfo.id
       };
-      console.log(payload);
       socketInstance.emit('sendMsg', {
         payload
       });
+    },
+    scrollToLast () {
+      const dom = document.querySelector('.view.chatItem .content');
+      dom.scrollTop = dom.scrollHeight + 100;
     }
   }
 };

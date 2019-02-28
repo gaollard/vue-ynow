@@ -6,7 +6,7 @@
       @click-left="$router.go(-1)"
       left-arrow
     />
-    <div class="list">
+    <div class="list content">
       <div
         class="item"
         v-for="item in list"
@@ -93,12 +93,17 @@ export default {
 
 <style lang="scss" scoped>
 .view {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
   background-color: #e8eef2;
 }
 
 .list {
-  overflow: hidden;
+  flex: 1;
+  overflow: auto;
   padding-bottom: 80px;
+  -webkit-overflow-scrolling : touch;
 }
 
 .item {
@@ -113,8 +118,8 @@ export default {
 
 .item-avatar {
   float: left;
-  width: 32px;
-  height: 32px;
+  width: 38px;
+  height: 38px;
   margin-right: 10px;
   border-radius: 50%;
 }

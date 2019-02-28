@@ -154,6 +154,7 @@ export default {
 .view {
   overflow: hidden;
   min-height: 100vh;
+  padding-bottom: 50px;
   background-color: #f5f5f5;
 }
 
@@ -257,12 +258,14 @@ export default {
 }
 
 .group-btm {
-  position: relative;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  box-sizing: border-box;
   margin-bottom: 0;
   display: flex;
   align-items: center;
-  // justify-content: space-between;
-  // justify-content: flex-end;
   height: 50px;
   padding: 0 10px;
   font-size: 12px;

@@ -55,6 +55,8 @@ export default {
   background: #EEE;
   color: #9B9B9B;
   font-size: 14px;
+  -webkit-overflow-scrolling : touch;
+
   .item {
     line-height: 44px;
     border-bottom: 1px solid #E1E1E1;

@@ -50,6 +50,8 @@ export default {
 .p-list {
   overflow: hidden;
   padding: 12px;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .p-img {
@@ -60,8 +62,7 @@ export default {
 }
 
 .p-item {
-  float: left;
-  width: 170px;
+  width: 48.4%;
   font-size: 14px;
   color: #000;
   background-color: #fff;
@@ -74,7 +75,7 @@ export default {
 }
 
 .p-item:nth-of-type(2n) {
-  margin-left: 11px;
+  margin-left: 3.2%;
 }
 
 .p-name {

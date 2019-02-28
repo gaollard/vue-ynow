@@ -15,7 +15,7 @@
               <span class="item-price">￥{{ item.itemInfo.price / 100 }}</span>
               <span class="item-discount">{{ item.itemInfo.depreciation }}</span>
               <span class="item-postion">{{ item.itemInfo.position }}</span>
-              <span class="item-btn" @click="doDeleteXzProductCollect(item.id)">取消收藏</span>
+              <span class="item-btn" @click="doDeleteXzProductCollect(item)">取消收藏</span>
             </div>
           </div>
         </li>
@@ -44,12 +44,12 @@ export default {
       this.$router.go(-1);
     },
     doGetXzProductCollect () {
-      ynowApi.getXzProductCollect().then(res => {
+      ynowApi.getXzProductCollect({ typeId: 1 }).then(res => {
         this.list = res.data.list;
       });
     },
-    doDeleteXzProductCollect (recordId) {
-      ynowApi.deleteXzProductCollect(recordId).then(res => {
+    doDeleteXzProductCollect (record) {
+      ynowApi.deleteXzProductCollect({ recordId: record.id }).then(res => {
         this.doGetXzProductCollect();
       });
     }

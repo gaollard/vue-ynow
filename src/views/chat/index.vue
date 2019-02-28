@@ -56,15 +56,15 @@ export default {
   display: flex;
   overflow: hidden;
   font-size: 12px;
-  padding: 6px 10px;
+  padding: 10px 10px;
   background-color: #fff;
   border-bottom: 1px solid #eee;
 }
 
 .item-avatar {
   float: left;
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   margin-right: 10px;
   border-radius: 50%;
 }
@@ -74,7 +74,7 @@ export default {
 }
 
 .item-name {
-  font-size: 13px;
+  font-size: 14px;
   margin-bottom: 4px;
 }
 </style>
