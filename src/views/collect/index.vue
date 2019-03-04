@@ -6,8 +6,8 @@
       @click-left="onClickLeft"
     />
     <div class="content">
-      <ul class="list">
-        <li class="item" v-for="(item, index) in list" :key="index">
+      <div class="list">
+        <div class="item" v-for="(item, index) in list" :key="index" @click="switchPage('/xzProductItem/'+item.itemInfo.id)">
           <div class="item-logo" :style="{'background-image': 'url('+item.itemInfo.imgs[0]+')'}"></div>
           <div class="item-right">
             <div class="item-name">{{ item.itemInfo.name.substr(0, 45) }}</div>
@@ -15,11 +15,11 @@
               <span class="item-price">￥{{ item.itemInfo.price / 100 }}</span>
               <span class="item-discount">{{ item.itemInfo.depreciation }}</span>
               <span class="item-postion">{{ item.itemInfo.position }}</span>
-              <span class="item-btn" @click="doDeleteXzProductCollect(item)">取消收藏</span>
+              <span class="item-btn" @click.stop="doDeleteXzProductCollect(item)">取消收藏</span>
             </div>
           </div>
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -43,6 +43,9 @@ export default {
     onClickLeft () {
       this.$router.go(-1);
     },
+    switchPage (url) {
+      this.$router.push(url);
+    },
     doGetXzProductCollect () {
       ynowApi.getXzProductCollect({ typeId: 1 }).then(res => {
         this.list = res.data.list;
@@ -64,7 +67,9 @@ export default {
 }
 .item {
   overflow: hidden;
+  display: block;
   padding: 6px 12px;
+  color: #333;
   background: #fff;
   border-radius: 4px;
   border-bottom: 1px solid #eee;
