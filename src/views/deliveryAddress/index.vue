@@ -6,36 +6,38 @@
       left-arrow
       @click-left="onClickLeft"
     />
-    <ul class="list">
-      <li class="item" v-for="(item, index) in list" :key="index">
-        <div class="item__hd">
-          <span class="username">{{ item.username }}</span>
-          <span class="mobile">{{ item.mobile }}</span>
-          <span class="remark">公司</span>
-        </div>
-        <div class="item__bd">
-          <span>{{ item.province }}</span>
-          <span>{{ item.city }}</span>
-          <span>{{ item.district }}</span>
-          <span>{{ item.address }}</span>
-        </div>
-        <div class="item__ft">
-          <button class="btn btn-detail">修改地址</button>
-          <button class="btn btn-remove">删除地址</button>
-        </div>
-      </li>
-    </ul>
+    <div class="content">
+      <ul class="list">
+        <li class="item" v-for="(item, index) in list" :key="index">
+          <div class="item__hd">
+            <span class="username">{{ item.username }}</span>
+            <span class="mobile">{{ item.mobile }}</span>
+            <span class="remark">公司</span>
+          </div>
+          <div class="item__bd">
+            <span>{{ item.province }}</span>
+            <span>{{ item.city }}</span>
+            <span>{{ item.district }}</span>
+            <span>{{ item.address }}</span>
+          </div>
+          <div class="item__ft">
+            <van-button class="btn btn-detail" plain type="primary" size="small">修改地址</van-button>
+            <van-button class="btn btn-remove" plain type="primary" size="small" @click="handleRemove(item.id)">删除地址</van-button>
+          </div>
+        </li>
+      </ul>
+    </div>
     <div class="bottom-fixed">
-      <button class="btn">新建收货地址</button>
+      <button class="btn" @click="$router.push('/addAddress')">新建收货地址</button>
     </div>
   </div>
 </template>
 
 <script>
 import Vue from 'vue';
-import { NavBar } from 'vant';
+import { NavBar, Toast, Button, Dialog } from 'vant';
 import ynowApi from '../../api/ynow';
-Vue.use(NavBar);
+Vue.use(NavBar).use(Button);
 
 export default {
   data () {
@@ -44,13 +46,31 @@ export default {
     };
   },
   mounted () {
-    ynowApi.getdeliveryAddressList().then(res => {
-      this.list = res.data.list;
-    });
+    this.doGetAddressList();
   },
   methods: {
     onClickLeft () {
       this.$router.go(-1);
+    },
+    doGetAddressList () {
+      ynowApi.getdeliveryAddressList().then(res => {
+        this.list = res.data.list;
+      });      
+    },
+    handleRemove (id) {
+      Dialog.confirm({
+        title: '标题',
+        message: '删除之后不可恢复'
+      }).then(() => {
+        ynowApi.removeAddress({ id }).then(res => {
+          if (+res.errCode === 0) {
+            Toast('删除成功');
+            this.doGetAddressList();
+          } else {
+            Toast(res.errMsg);
+          }
+        });
+      });
     }
   }
 };
@@ -59,6 +79,10 @@ export default {
 <style lang="scss" scoped>
 .view {
   background: #eee;
+}
+
+.content {
+  padding-bottom: 50px;
 }
 
 .list {
@@ -87,7 +111,7 @@ export default {
     padding: 2px 4px;
     margin-left: 10px;
     color: #fff;
-    background: #f44;
+    background: #07c160;
     border-radius: 2px;
   }
 }
@@ -106,14 +130,7 @@ export default {
   border-top: 1px solid #f5f5f5;
   .btn {
     float: right;
-    font-size: 12px;
-    line-height: 20px;
-    padding: 3px 6px;
     margin-left: 10px;
-    color: #333;
-    background: #fff;
-    border-radius: 1px;
-    border: 1px solid #333;
   }
 }
 
@@ -130,7 +147,7 @@ export default {
     line-height: 44px;
     color: #fff;
     text-align: center;
-    background: #f44;
+    background: #07c160;
   }
 }
 </style>

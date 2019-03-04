@@ -126,6 +126,11 @@ export default new Router({
       component: () => import('../views/chatItem')
     },
     {
+      path: '/addAddress',
+      name: 'addAddress',
+      component: () => import('../views/addAddress')
+    },
+    {
       // 我的收藏
       path: '*',
       component: () => import('../views/v404')
