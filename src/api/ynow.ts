@@ -13,6 +13,9 @@ export default {
   getUserInfo() {
     return http.get(`${host}/user/userInfo`);
   },
+  updateUserInfo (params) {
+    return http.post(`${host}/user/userInfo`, params);
+  },
   // 获取当天签到状态
   getCheckinStatus() {
     return http.get(`${host}/checkin`);
@@ -103,5 +106,8 @@ export default {
   },
   removeAddress({ id }) {
     return http.delete(`${host}/deliveryAddress/${id}`);
+  },
+  register ({ mobile, password }) {
+    return http.post(`${host}/user/register`, { mobile, password });
   }
 };

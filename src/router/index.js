@@ -131,6 +131,11 @@ export default new Router({
       component: () => import('../views/addAddress')
     },
     {
+      path: '/register',
+      name: 'register',
+      component: () => import('../views/register')
+    },
+    {
       // 我的收藏
       path: '*',
       component: () => import('../views/v404')

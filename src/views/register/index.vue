@@ -1,5 +1,5 @@
 <template>
-  <div class="view-login">
+  <div class="view-register">
     <div class="login-form">
       <van-cell-group>
         <van-field v-model="mobile" placeholder="输入手机号码"/>
@@ -10,12 +10,12 @@
         type="primary"
         size="large"
         :loading="loading"
-        @click="handleClick">立即登录</van-button>
+        @click="handleClick">立即注册</van-button>
         <div class="btm-wrap">
-          <p class="tip-text">上述账户为测试账户</p>
+          <!-- <p class="tip-text">上述账户为测试账户</p> -->
           <div class="register-wrap">
-            <span>没有账户？</span>
-            <router-link class="register-link" to="/register">注册</router-link>
+            <span>已有账户？</span>
+            <router-link class="register-link" to="/login">登录</router-link>
           </div>
         </div>
     </div>
@@ -25,7 +25,7 @@
 <script>
 import Vue from 'vue';
 import ynowApi from '../../api/ynow';
-import { Field, Button } from 'vant';
+import { Field, Button, Toast } from 'vant';
 import cookies from 'js-cookie';
 import store from 'store';
 
@@ -37,20 +37,28 @@ export default {
       userInfo: null,
       mobile: '',
       password: '',
+      nickname: '',
+      avatar: '',
       loading: false
     }
   },
   methods: {
     async handleClick () {
       this.loading = true;
-      ynowApi.login({
+      ynowApi.register({
         mobile: this.mobile,
         password: this.password
       }).then(res => {
-        cookies.set('token', res.data.token);
-        store.set('userInfo', res.data);
-        this.$router.go(-1);
-      });
+        if (+res.errCode === 0) {
+          cookies.set('token', res.data.token);
+          store.set('userInfo', res.data);
+          this.$router.go(-1);
+        } else {
+          Toast(res.errMsg);
+        }
+      }).finally(() => {
+        this.loading = false;
+      })
     }
   }
 };
