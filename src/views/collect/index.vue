@@ -1,21 +1,33 @@
 <template>
   <div class="view-point">
-    <van-nav-bar
-      title="我的收藏"
-      left-text="返回"
-      @click-left="onClickLeft"
-    />
+    <van-nav-bar title="我的收藏" left-text="返回" @click-left="onClickLeft" />
     <div class="content">
       <div class="list">
-        <div class="item" v-for="(item, index) in list" :key="index" @click="switchPage('/xzProductItem/'+item.itemInfo.id)">
-          <div class="item-logo" :style="{'background-image': 'url('+item.itemInfo.imgs[0]+')'}"></div>
+        <div
+          class="item"
+          v-for="(item, index) in list"
+          :key="index"
+          @click="switchPage('/xzProductItem/' + item.itemInfo.id)"
+        >
+          <div
+            class="item-logo"
+            :style="{
+              'background-image': 'url(' + item.itemInfo.imgs[0] + ')'
+            }"
+          ></div>
           <div class="item-right">
             <div class="item-name">{{ item.itemInfo.name.substr(0, 45) }}</div>
             <div class="item-btm">
               <span class="item-price">￥{{ item.itemInfo.price / 100 }}</span>
-              <span class="item-discount">{{ item.itemInfo.depreciation }}</span>
+              <span class="item-discount">{{
+                item.itemInfo.depreciation
+              }}</span>
               <span class="item-postion">{{ item.itemInfo.position }}</span>
-              <span class="item-btn" @click.stop="doDeleteXzProductCollect(item)">取消收藏</span>
+              <span
+                class="item-btn"
+                @click.stop="doDeleteXzProductCollect(item)"
+                >取消收藏</span
+              >
             </div>
           </div>
         </div>
@@ -25,39 +37,39 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import { NavBar } from 'vant';
-import ynowApi from '../../api/ynow';
-Vue.use(NavBar);
+import Vue from 'vue'
+import { NavBar } from 'vant'
+import ynowApi from '../../api/ynow'
+Vue.use(NavBar)
 
 export default {
   data () {
     return {
       list: []
-    };
+    }
   },
   mounted () {
-    this.doGetXzProductCollect();
+    this.doGetXzProductCollect()
   },
   methods: {
     onClickLeft () {
-      this.$router.go(-1);
+      this.$router.go(-1)
     },
     switchPage (url) {
-      this.$router.push(url);
+      this.$router.push(url)
     },
     doGetXzProductCollect () {
       ynowApi.getXzProductCollect({ typeId: 1 }).then(res => {
-        this.list = res.data.list;
-      });
+        this.list = res.data.list
+      })
     },
     doDeleteXzProductCollect (record) {
       ynowApi.deleteXzProductCollect({ recordId: record.id }).then(res => {
-        this.doGetXzProductCollect();
-      });
+        this.doGetXzProductCollect()
+      })
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

@@ -1,38 +1,37 @@
 <template>
   <div class="view">
-    <van-nav-bar
-      title="我的资料"
-      @click-left="onClickLeft"
-    />
+    <van-nav-bar title="我的资料" @click-left="onClickLeft" />
     <ul class="list">
-      <li class="item" v-for="(item, index) in list" :key="index">{{ item.date.substr(0, 10) }}</li>
+      <li class="item" v-for="(item, index) in list" :key="index">
+        {{ item.date.substr(0, 10) }}
+      </li>
     </ul>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import { NavBar } from 'vant';
-import ynowApi from '../../api/ynow';
-Vue.use(NavBar);
+import Vue from 'vue'
+import { NavBar } from 'vant'
+import ynowApi from '../../api/ynow'
+Vue.use(NavBar)
 
 export default {
   data () {
     return {
       list: []
-    };
+    }
   },
   mounted () {
     ynowApi.getCheckinList().then(res => {
-      this.list = res.data.list;
-    });
+      this.list = res.data.list
+    })
   },
   methods: {
     onClickLeft () {
-      this.$router.go(-1);
+      this.$router.go(-1)
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

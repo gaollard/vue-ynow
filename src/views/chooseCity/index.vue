@@ -1,6 +1,5 @@
 <template>
-  <div class="view">
-  </div>
+  <div class="view"></div>
 </template>
 
 <script lang="ts">
@@ -11,7 +10,7 @@ import ynowApi from '../../api/ynow'
 @Component
 export default class AccountView extends Vue {
   list = null
-  mounted () {
+  mounted() {
     ynowApi.getdeliveryAddressList().then(res => {
       this.list = res.data.list
     })

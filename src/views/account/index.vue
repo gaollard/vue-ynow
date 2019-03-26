@@ -2,14 +2,16 @@
   <div class="view-account">
     <div class="card-cover">
       <template v-if="userInfo">
-        <img class="avatar" :src="userInfo.avatar">
+        <img class="avatar" :src="userInfo.avatar" />
         <div class="profile">
           <div class="nickname">{{ userInfo.nickname }}</div>
           <div class="mobile">{{ userInfo.mobile }}</div>
         </div>
         <!-- <div class="btn-set" @click="$router.push('/userInfo')">账户设置</div> -->
         <div class="btn-checkin">
-          <span @click="handleCheckin">{{ checkinStatus ? '已签到' : '签到' }}</span>
+          <span @click="handleCheckin">{{
+            checkinStatus ? '已签到' : '签到'
+          }}</span>
         </div>
       </template>
       <template v-else>
@@ -24,54 +26,56 @@
       <router-link to="/order">订单</router-link>
     </div>
     <div class="card-link">
-      <van-cell title="发布宝贝" to="/xzProductCreate"/>
-      <van-cell title="我的发布" to="/myProdcust"/>
-      <van-cell title="地址管理" to="/DeliveryAddress"/>
-      <van-cell title="账户设置" to="/userInfo"/>
-      <van-cell title="立即登录" to="/login"/>
+      <van-cell title="发布宝贝" to="/xzProductCreate" />
+      <van-cell title="我的发布" to="/myProdcust" />
+      <van-cell title="地址管理" to="/DeliveryAddress" />
+      <van-cell title="账户设置" to="/userInfo" />
+      <van-cell title="立即登录" to="/login" />
     </div>
 
-    <div class="join-us">本站属于EggJS练习，大部分模块正在建设，欢迎你的加入</div>
+    <div class="join-us">
+      本站属于EggJS练习，大部分模块正在建设，欢迎你的加入
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import ynowApi from '../../api/ynow';
+import ynowApi from '../../api/ynow'
 
 export default {
   data () {
     return {
       userInfo: null,
       checkinStatus: true
-    };
+    }
   },
   mounted () {
-    this.doGetUserInfo();
-    this.doGetCheckInStatus();
+    this.doGetUserInfo()
+    this.doGetCheckInStatus()
   },
   methods: {
     doGetCheckInStatus () {
       ynowApi.getCheckinStatus().then(res => {
-        this.checkinStatus = +res.data.status === 1;
-      });
+        this.checkinStatus = +res.data.status === 1
+      })
     },
     doGetUserInfo () {
       ynowApi.getUserInfo().then(res => {
-        this.userInfo = res.data;
-      });
+        this.userInfo = res.data
+      })
     },
     handleCheckin () {
       if (!this.checkinStatus) {
         ynowApi.checkin().then(res => {
-          this.doGetCheckInStatus();
-          this.$router.push('/checkin');
-        });
+          this.doGetCheckInStatus()
+          this.$router.push('/checkin')
+        })
       } else {
-        this.$router.push('/checkin');
+        this.$router.push('/checkin')
       }
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

@@ -1,6 +1,11 @@
 <template>
   <div id="app">
-    <van-tabbar class="tabbar" v-show="$route.meta.tabbar" v-model="activeIndex" @change="handleChange">
+    <van-tabbar
+      class="tabbar"
+      v-show="$route.meta.tabbar"
+      v-model="activeIndex"
+      @change="handleChange"
+    >
       <van-tabbar-item icon="home-o" to="/">闲鸭</van-tabbar-item>
       <van-tabbar-item icon="apps-o" to="/category">分类</van-tabbar-item>
       <van-tabbar-item icon="fire-o" to="/auction">竞拍</van-tabbar-item>
@@ -8,33 +13,36 @@
       <van-tabbar-item icon="manager-o" to="/account">我的</van-tabbar-item>
     </van-tabbar>
     <keep-alive>
-      <router-view class="view" :class="[{'has-tabbar': $route.meta.tabbar}, $route.name]"/>
+      <router-view
+        class="view"
+        :class="[{ 'has-tabbar': $route.meta.tabbar }, $route.name]"
+      />
     </keep-alive>
   </div>
 </template>
 
 <script>
-import Vue from 'vue';
-import { Tabbar, TabbarItem } from 'vant';
-Vue.use(Tabbar).use(TabbarItem);
+import Vue from 'vue'
+import { Tabbar, TabbarItem } from 'vant'
+Vue.use(Tabbar).use(TabbarItem)
 
 export default {
   name: 'App',
   data () {
     return {
       activeIndex: 0
-    };
+    }
   },
   methods: {
     handleChange (index) {
-      this.activeIndex = index;
+      this.activeIndex = index
     }
   },
   mounted () {
-    this.$store.dispatch('chat/initSocket');
-    this.$store.dispatch('chat/getChatList');
+    this.$store.dispatch('chat/initSocket')
+    this.$store.dispatch('chat/getChatList')
   }
-};
+}
 </script>
 
 <style scoped>

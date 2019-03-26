@@ -8,9 +8,12 @@
         class="p-item"
         v-for="(item, index) in list"
         :key="index"
-        :to="'/xzProductItem/'+item.id"
+        :to="'/xzProductItem/' + item.id"
       >
-        <div class="p-img" :style="{backgroundImage: 'url(' + item.imgs[0] + ')'}"></div>
+        <div
+          class="p-img"
+          :style="{ backgroundImage: 'url(' + item.imgs[0] + ')' }"
+        ></div>
         <div class="p-info">
           <p class="p-name">{{ item.name }}</p>
           <p class="p-price">￥{{ item.price / 100 }}</p>
@@ -26,18 +29,17 @@
 </template>
 
 <script>
-import ynowApi from '../../api/ynow';
+import ynowApi from '../../api/ynow'
 export default {
   data () {
     return {
       list: []
-    };
+    }
   },
   mounted () {
-    ynowApi.getXzProductList().then(res => {
-    });
+    ynowApi.getXzProductList().then(res => {})
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -98,7 +100,7 @@ export default {
 
 .line {
   padding: 2px 0;
-  border-bottom: .5px solid #e6e6e6;
+  border-bottom: 0.5px solid #e6e6e6;
 }
 
 .user-info {

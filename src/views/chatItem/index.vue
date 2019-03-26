@@ -11,32 +11,40 @@
         class="item"
         v-for="item in list"
         :key="item.id"
-        @click="$router.push('/chatItem/'+item.id)"
+        @click="$router.push('/chatItem/' + item.id)"
         :data-from="item.from"
         :data-to="item.to"
         :class="itemCls(item)"
       >
-        <img class="item-avatar" :src="getAvatar(item)" alt="头像">
+        <img class="item-avatar" :src="getAvatar(item)" alt="头像" />
         <div class="item-name">{{ item.content }}</div>
       </div>
     </div>
     <div class="btm-fixed">
       <div class="form">
-        <van-field class="form-input" v-model="content" placeholder="请输入用户名" />
-        <van-button class="form-submit" type="primary" @click="doSendMsg">发送</van-button>
+        <van-field
+          class="form-input"
+          v-model="content"
+          placeholder="请输入用户名"
+        />
+        <van-button class="form-submit" type="primary" @click="doSendMsg"
+          >发送</van-button
+        >
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Vue from 'vue';
-import { Field, Button, NavBar } from 'vant';
-import store from 'store';
-import { mapState } from 'vuex';
-const userInfo = store.get('userInfo');
+import Vue from 'vue'
+import { Field, Button, NavBar } from 'vant'
+import store from 'store'
+import { mapState } from 'vuex'
+const userInfo = store.get('userInfo')
 
-Vue.use(Field).use(Button).use(NavBar);
+Vue.use(Field)
+  .use(Button)
+  .use(NavBar)
 
 export default {
   data () {
@@ -44,51 +52,51 @@ export default {
       userInfo,
       msgList: [],
       content: 'mock message'
-    };
+    }
   },
   computed: {
     ...mapState({
       list (state) {
-        const key = `${userInfo.id}_${this.$route.params.partnerId}`;
-        const list = [].concat(state.chat.msgObj[key] || []);
+        const key = `${userInfo.id}_${this.$route.params.partnerId}`
+        const list = [].concat(state.chat.msgObj[key] || [])
 
         function chatCompare (chatA, chatB) {
           if (chatB.create_time < chatA.create_time) {
-            return 1;
+            return 1
           } else if (chatB.create_time === chatA.create_time) {
-            return 0;
+            return 0
           } else {
-            return -1;
+            return -1
           }
         }
-        list.sort(chatCompare);
-        return list;
+        list.sort(chatCompare)
+        return list
       },
       partnerInfo (state) {
         return state.chat.userList.find(element => {
-          return +element.id === +this.$route.params.partnerId;
-        });
+          return +element.id === +this.$route.params.partnerId
+        })
       }
     })
   },
   methods: {
     getAvatar (msg) {
-      return this.isFromMe(msg) ? this.userInfo.avatar : this.partnerInfo.avatar;
+      return this.isFromMe(msg) ? this.userInfo.avatar : this.partnerInfo.avatar
     },
     isFromMe (msg) {
-      return +msg.f_from === +this.userInfo.id;
+      return +msg.f_from === +this.userInfo.id
     },
     itemCls (msg) {
-      return this.isFromMe(msg) ? 'item-mine' : 'item-partner';
+      return this.isFromMe(msg) ? 'item-mine' : 'item-partner'
     },
     doSendMsg () {
       this.$store.dispatch('chat/sendMsg', {
         to: this.$route.params.partnerId,
         content: this.content
-      });
+      })
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -103,7 +111,7 @@ export default {
   flex: 1;
   overflow: auto;
   padding-bottom: 80px;
-  -webkit-overflow-scrolling : touch;
+  -webkit-overflow-scrolling: touch;
 }
 
 .item {

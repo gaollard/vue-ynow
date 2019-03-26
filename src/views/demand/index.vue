@@ -21,19 +21,19 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import Component from 'vue-class-component';
-import ynowApi from '../../api/ynow';
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import ynowApi from '../../api/ynow'
 
 @Component
 export default class AccountView extends Vue {
   list = null
   mounted () {
     ynowApi.getDemandList().then(res => {
-      this.list = res.data.list;
-    });
+      this.list = res.data.list
+    })
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

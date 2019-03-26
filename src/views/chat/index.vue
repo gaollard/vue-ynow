@@ -5,10 +5,10 @@
         class="item"
         v-for="item in userList"
         :key="item.id"
-        @click="$router.push('/chatItem/'+item.id)"
+        @click="$router.push('/chatItem/' + item.id)"
         :data-uid="item.id"
       >
-        <img class="item-avatar" :src="item.avatar" alt="头像">
+        <img class="item-avatar" :src="item.avatar" alt="头像" />
         <div>
           <div class="item-name">{{ item.nickname }}</div>
           <div class="item-msg" v-text="getLastMsg(item)"></div>
@@ -19,14 +19,13 @@
 </template>
 
 <script>
-import store from 'store';
-import { mapState } from 'vuex';
-const userInfo = store.get('userInfo');
+import store from 'store'
+import { mapState } from 'vuex'
+const userInfo = store.get('userInfo')
 
 export default {
   data () {
-    return {
-    };
+    return {}
   },
   computed: {
     ...mapState({
@@ -37,14 +36,14 @@ export default {
   },
   methods: {
     getMsgKey (user) {
-      return `${userInfo.id}_${user.id}`;
+      return `${userInfo.id}_${user.id}`
     },
     getLastMsg (user) {
-      const key = this.getMsgKey(user);
-      return this.msgObj[key][0]['content'];
+      const key = this.getMsgKey(user)
+      return this.msgObj[key][0]['content']
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

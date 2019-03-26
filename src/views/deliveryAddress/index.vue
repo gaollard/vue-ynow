@@ -1,6 +1,6 @@
 <template>
   <div class="view-deliveryAddress">
-   <van-nav-bar
+    <van-nav-bar
       title="收货地址"
       left-text="返回"
       left-arrow
@@ -21,41 +21,52 @@
             <span>{{ item.address }}</span>
           </div>
           <div class="item__ft">
-            <van-button class="btn btn-detail" plain type="primary" size="small">修改地址</van-button>
-            <van-button class="btn btn-remove" plain type="primary" size="small" @click="handleRemove(item.id)">删除地址</van-button>
+            <van-button class="btn btn-detail" plain type="primary" size="small"
+              >修改地址</van-button
+            >
+            <van-button
+              class="btn btn-remove"
+              plain
+              type="primary"
+              size="small"
+              @click="handleRemove(item.id)"
+              >删除地址</van-button
+            >
           </div>
         </li>
       </ul>
     </div>
     <div class="bottom-fixed">
-      <button class="btn" @click="$router.push('/addAddress')">新建收货地址</button>
+      <button class="btn" @click="$router.push('/addAddress')">
+        新建收货地址
+      </button>
     </div>
   </div>
 </template>
 
 <script>
-import Vue from 'vue';
-import { NavBar, Toast, Button, Dialog } from 'vant';
-import ynowApi from '../../api/ynow';
-Vue.use(NavBar).use(Button);
+import Vue from 'vue'
+import { NavBar, Toast, Button, Dialog } from 'vant'
+import ynowApi from '../../api/ynow'
+Vue.use(NavBar).use(Button)
 
 export default {
   data () {
     return {
       list: []
-    };
+    }
   },
   mounted () {
-    this.doGetAddressList();
+    this.doGetAddressList()
   },
   methods: {
     onClickLeft () {
-      this.$router.go(-1);
+      this.$router.go(-1)
     },
     doGetAddressList () {
       ynowApi.getdeliveryAddressList().then(res => {
-        this.list = res.data.list;
-      });      
+        this.list = res.data.list
+      })
     },
     handleRemove (id) {
       Dialog.confirm({
@@ -64,16 +75,16 @@ export default {
       }).then(() => {
         ynowApi.removeAddress({ id }).then(res => {
           if (+res.errCode === 0) {
-            Toast('删除成功');
-            this.doGetAddressList();
+            Toast('删除成功')
+            this.doGetAddressList()
           } else {
-            Toast(res.errMsg);
+            Toast(res.errMsg)
           }
-        });
-      });
+        })
+      })
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

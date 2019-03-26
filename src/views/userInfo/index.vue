@@ -28,7 +28,7 @@
                 +
                 <!-- <img class="icon-add" src="./img/add.png"> -->
               </template>
-              <img v-else :src="userInfoCache.avatar">
+              <img v-else :src="userInfoCache.avatar" />
             </van-uploader>
           </template>
         </van-cell>
@@ -43,11 +43,13 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import { NavBar, Field, Toast, Uploader } from 'vant';
-import ynowApi from '../../api/ynow';
-import * as qiniu from 'qiniu-js';
-Vue.use(NavBar).use(Field).use(Uploader);
+import Vue from 'vue'
+import { NavBar, Field, Toast, Uploader } from 'vant'
+import ynowApi from '../../api/ynow'
+import * as qiniu from 'qiniu-js'
+Vue.use(NavBar)
+  .use(Field)
+  .use(Uploader)
 
 export default {
   data () {
@@ -56,78 +58,86 @@ export default {
       userInfoCache: {},
       pickList: [],
       token: ''
-    };
+    }
   },
   methods: {
     onClickLeft () {
-      this.$router.go(-1);
+      this.$router.go(-1)
     },
     onBlur (key) {
-      if (this.userInfoCache[key] && (this.userInfo[key] !== this.userInfoCache[key])) {
-        ynowApi.updateUserInfo({
-          [key]: this.userInfoCache[key]
-        }).then(res => {
-          if (+res.errCode === 0) {
-            if (key === 'nickname') {
-              Toast('修改昵称成功');
+      if (
+        this.userInfoCache[key] &&
+        this.userInfo[key] !== this.userInfoCache[key]
+      ) {
+        ynowApi
+          .updateUserInfo({
+            [key]: this.userInfoCache[key]
+          })
+          .then(res => {
+            if (+res.errCode === 0) {
+              if (key === 'nickname') {
+                Toast('修改昵称成功')
+              }
             }
-          }
-        })
+          })
       }
     },
     onRead (file) {
-      this.pickList[0] = file;
-      this.uploadImg(this.pickList.length - 1, file.file);
+      this.pickList[0] = file
+      this.uploadImg(this.pickList.length - 1, file.file)
     },
     doGet7nToken () {
       ynowApi.get7nToken().then(res => {
-        this.token = res.data.token;
-      });
+        this.token = res.data.token
+      })
     },
     uploadImg (index, file, callback) {
-      const vm = this;
-      const observable = qiniu.upload(file, file.name, this.token, { }, { });
+      const vm = this
+      const observable = qiniu.upload(file, file.name, this.token, {}, {})
       observable.subscribe({
         next (res) {
-          vm.pickList[index]['percent'] = res.total.percent;
-          vm.pickList = [].concat(vm.pickList);
+          vm.pickList[index]['percent'] = res.total.percent
+          vm.pickList = [].concat(vm.pickList)
         },
         error (error) {
-          Toast(error);
+          Toast(error)
         },
         complete (res) {
-          console.log(res);
-          vm.pickList[index]['url'] = `//c1.airtlab.com/${res.key}`;
-          vm.pickList = [].concat(vm.pickList);
-          vm.userInfoCache.avatar = vm.pickList[index]['url'];
-          vm.onBlur('avatar');
+          console.log(res)
+          vm.pickList[index]['url'] = `//c1.airtlab.com/${res.key}`
+          vm.pickList = [].concat(vm.pickList)
+          vm.userInfoCache.avatar = vm.pickList[index]['url']
+          vm.onBlur('avatar')
         }
-      });
+      })
     },
     doCreateProduct () {
-      let imgs = this.pickList.map(element => element.url);
-      imgs = JSON.stringify(imgs);
-      const params = Object.assign({
-        imgs
-      }, this.form);
+      let imgs = this.pickList.map(element => element.url)
+      imgs = JSON.stringify(imgs)
+      const params = Object.assign(
+        {
+          imgs
+        },
+        this.form
+      )
       ynowApi.createXzProduct(params).then(res => {
-        Toast('上传成功');
-      });
+        Toast('上传成功')
+      })
     },
     doGetUserInfo () {
       ynowApi.getUserInfo().then(res => {
-        this.userInfo = res.data;
+        this.userInfo = res.data
         this.userInfoCache = {
           ...res.data
         }
-      });
+      })
     }
   },
   mounted () {
-    this.doGetUserInfo();
-    this.doGet7nToken();
+    this.doGetUserInfo()
+    this.doGet7nToken()
   }
-};
+}
 </script>
 
 <style scoped>

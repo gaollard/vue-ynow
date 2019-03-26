@@ -9,7 +9,9 @@
       <ul class="list">
         <li class="item" v-for="(item, index) in list" :key="index">
           <div class="item-date">{{ item.createTime.substr(0, 10) }}</div>
-          <div class="item-value" :class="{'is-negative': !item.action}">{{ item.action ? '+' : '-' }}{{ item.value }}</div>
+          <div class="item-value" :class="{ 'is-negative': !item.action }">
+            {{ item.action ? '+' : '-' }}{{ item.value }}
+          </div>
           <div class="item-desc">{{ item.description }}</div>
         </li>
       </ul>
@@ -18,28 +20,28 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import { NavBar } from 'vant';
-import ynowApi from '../../api/ynow';
-Vue.use(NavBar);
+import Vue from 'vue'
+import { NavBar } from 'vant'
+import ynowApi from '../../api/ynow'
+Vue.use(NavBar)
 
 export default {
   data () {
     return {
       list: []
-    };
+    }
   },
   mounted () {
     ynowApi.getPointList().then(res => {
-      this.list = res.data.list;
-    });
+      this.list = res.data.list
+    })
   },
   methods: {
     onClickLeft () {
-      this.$router.go(-1);
+      this.$router.go(-1)
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

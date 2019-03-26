@@ -32,7 +32,7 @@ export default class NavbarComponent extends Vue {
       key: 2,
       href: '/search'
     }
-  ];
+  ]
 }
 </script>
 
@@ -66,7 +66,7 @@ export default class NavbarComponent extends Vue {
     right: 0;
     height: 2px;
     background-color: #31c27c;
-    transform: scaleX(.1);
+    transform: scaleX(0.1);
   }
 }
 </style>
