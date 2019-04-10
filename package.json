@@ -26,6 +26,7 @@
     "vue-class-component": "^6.3.2",
     "vue-property-decorator": "^7.3.0",
     "vue-router": "^3.0.1",
+    "vueg": "^1.4.5",
     "vuex": "^3.0.1",
     "ymuicon": "^2.0.3"
   },

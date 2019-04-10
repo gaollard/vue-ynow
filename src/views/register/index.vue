@@ -2,7 +2,7 @@
   <div class="view-register">
     <div class="login-form">
       <van-cell-group>
-        <van-field v-model="mobile" placeholder="输入手机号码" />
+        <van-field v-model="mobile" placeholder="输入账户昵称" />
         <van-field
           v-model="password"
           placeholder="输入登录密码"

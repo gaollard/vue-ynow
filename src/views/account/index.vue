@@ -1,22 +1,18 @@
 <template>
   <div class="view-account">
-    <div class="card-cover">
-      <template v-if="userInfo">
-        <img class="avatar" :src="userInfo.avatar" />
-        <div class="profile">
-          <div class="nickname">{{ userInfo.nickname }}</div>
-          <div class="mobile">{{ userInfo.mobile }}</div>
-        </div>
-        <!-- <div class="btn-set" @click="$router.push('/userInfo')">账户设置</div> -->
-        <div class="btn-checkin">
-          <span @click="handleCheckin">{{
-            checkinStatus ? '已签到' : '签到'
-          }}</span>
-        </div>
-      </template>
-      <template v-else>
-        <div>加载中...</div>
-      </template>
+    <div class="card-cover card-cover" v-if="userInfo">
+      <img class="avatar" :src="userInfo.avatar || require('./img/avatar.png')" />
+      <div class="profile">
+        <div class="nickname">{{ userInfo.nickname }}</div>
+        <div class="mobile">{{ userInfo.mobile }}</div>
+      </div>
+      <div class="btn-checkin">
+        <span @click="handleCheckin">{{ checkinStatus ? '已签到' : '签到' }}</span>
+      </div>
+    </div>
+    <div class="card-cover" v-else>
+      <img class="avatar" src="./img/avatar.png">
+      <div class="btn-login" @click="$router.push('/login')">登录/注册</div>
     </div>
     <div class="card-menu">
       <router-link to="/follow">关注</router-link>
@@ -26,50 +22,73 @@
       <router-link to="/order">订单</router-link>
     </div>
     <div class="card-link">
-      <van-cell title="发布宝贝" to="/xzProductCreate" />
-      <van-cell title="我的发布" to="/myProdcust" />
-      <van-cell title="地址管理" to="/DeliveryAddress" />
-      <van-cell title="账户设置" to="/userInfo" />
-      <van-cell title="立即登录" to="/login" />
-    </div>
-
-    <div class="join-us">
-      本站属于EggJS练习，大部分模块正在建设，欢迎你的加入
+      <van-cell title="发布宝贝" to="/xzProductCreate" is-link />
+      <van-cell title="我的发布" to="/myProdcust"  is-link />
+      <van-cell title="地址管理" to="/DeliveryAddress" is-link />
+      <van-cell title="账户设置" to="/userInfo" is-link />
+      <van-cell title="立即登录" to="/login" is-link />
     </div>
   </div>
 </template>
 
-<script lang="ts">
+<script>
+import { Toast } from 'vant'
+import { mapState } from 'vuex'
 import ynowApi from '../../api/ynow'
 
 export default {
   data () {
     return {
-      userInfo: null,
-      checkinStatus: true
+      checkinStatus: true,
+      isLoginValid: false
     }
   },
-  mounted () {
-    this.doGetUserInfo()
-    this.doGetCheckInStatus()
+  computed: {
+    ...mapState({
+      userInfo: state => state.user.userInfo
+    })
+  },
+  watch: {
+    userInfo (val) {
+      if (val) {
+        this.initPageData()
+      }
+    }
   },
   methods: {
-    doGetCheckInStatus () {
-      ynowApi.getCheckinStatus().then(res => {
-        this.checkinStatus = +res.data.status === 1
-      })
+    async initPageData () {
+      await this.doGetCheckInStatus()
     },
-    doGetUserInfo () {
-      ynowApi.getUserInfo().then(res => {
-        this.userInfo = res.data
-      })
+    async doGetCheckInStatus () {
+      try {
+        let ret = await ynowApi.getCheckinStatus()
+        if (+ret.retCode === 0) {
+          this.checkinStatus = +ret.data.status === 1
+        } else {
+          throw ret.errMsg
+        }
+      } catch (error) {
+        Toast(error.toString())
+      }
     },
-    handleCheckin () {
-      if (!this.checkinStatus) {
-        ynowApi.checkin().then(res => {
+    async doCheckIn () {
+      try {
+        let ret = await ynowApi.checkin()
+        if (+ret.retCode === 0) {
           this.doGetCheckInStatus()
+          return true
+        } else {
+          throw ret.errMsg
+        }
+      } catch (error) {
+        Toast(error.toString())
+      }
+    },
+    async handleCheckin () {
+      if (!this.checkinStatus) {
+        if (await this.doCheckIn()) {
           this.$router.push('/checkin')
-        })
+        }
       } else {
         this.$router.push('/checkin')
       }

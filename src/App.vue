@@ -12,12 +12,12 @@
       <van-tabbar-item info="5" icon="chat-o" to="/chat">消息</van-tabbar-item>
       <van-tabbar-item icon="manager-o" to="/account">我的</van-tabbar-item>
     </van-tabbar>
-    <keep-alive>
-      <router-view
-        class="view"
-        :class="[{ 'has-tabbar': $route.meta.tabbar }, $route.name]"
-      />
-    </keep-alive>
+    <!-- <keep-alive> -->
+    <!-- <transition :name="translate" mode="out-in"> -->
+
+    <router-view class="view" :class="[{ 'has-tabbar': $route.meta.tabbar }, $route.name]" v-transition/>
+    <!-- </transition> -->
+    <!-- </keep-alive> -->
   </div>
 </template>
 
@@ -30,7 +30,19 @@ export default {
   name: 'App',
   data () {
     return {
-      activeIndex: 0
+      activeIndex: 0,
+      currentRoute: null,
+      previousRoute: null,
+      nextRoute: null,
+      translate: 'fade'
+    }
+  },
+  watch: {
+    '$route': {
+      handler (val) {
+        this.currentRoute = val
+      },
+      immediate: true
     }
   },
   methods: {
@@ -39,8 +51,9 @@ export default {
     }
   },
   mounted () {
-    this.$store.dispatch('chat/initSocket')
-    this.$store.dispatch('chat/getChatList')
+    this.$store.dispatch('user/getUserInfo')
+    // this.$store.dispatch('chat/initSocket')
+    // this.$store.dispatch('chat/getChatList')
   }
 }
 </script>
@@ -58,5 +71,14 @@ export default {
 
 .tabbar {
   border-top: 1px solid #f5f5f5;
+}
+
+.fade-leave-active {
+  transition: all .5s ease;
+}
+
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
 }
 </style>

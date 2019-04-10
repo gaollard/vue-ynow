@@ -2,7 +2,7 @@
   <div class="view-login">
     <div class="login-form">
       <van-cell-group>
-        <van-field v-model="mobile" placeholder="输入手机号码" />
+        <van-field v-model="mobile" placeholder="输入账户昵称" />
         <van-field
           v-model="password"
           placeholder="输入登录密码"
@@ -18,7 +18,6 @@
         >立即登录</van-button
       >
       <div class="btm-wrap">
-        <p class="tip-text">上述账户为测试账户</p>
         <div class="register-wrap">
           <span>没有账户？</span>
           <router-link class="register-link" to="/register">注册</router-link>

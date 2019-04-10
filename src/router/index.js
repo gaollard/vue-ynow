@@ -9,7 +9,7 @@ const Point = () => import('../views/point/index.vue')
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   routes: [
     {
@@ -140,5 +140,14 @@ export default new Router({
       path: '*',
       component: () => import('../views/v404')
     }
-  ]
+  ],
+  scrollBehavior (to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { x: 0, y: 0 }
+    }
+  }
 })
+
+export default router

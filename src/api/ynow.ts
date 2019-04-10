@@ -109,5 +109,8 @@ export default {
   },
   register ({ mobile, password }) {
     return http.post(`${host}/user/register`, { mobile, password })
+  },
+  checkLogin () {
+    return http.get(`${host}/user/checkLogin`)
   }
 }
