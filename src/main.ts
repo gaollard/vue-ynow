@@ -5,6 +5,10 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+import './style/base.scss'
+import './style/cover.scss'
+import 'vant/lib/icon/local.css'
+
 import {
   Cell,
   NavBar,
@@ -24,9 +28,6 @@ Vue.use(Cell)
   .use(Field)
   .use(Switch)
   .use(Icon)
-
-import './style/base.scss'
-import './style/cover.scss'
 
 Vue.config.productionTip = false
 
