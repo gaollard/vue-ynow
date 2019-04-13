@@ -136,6 +136,12 @@ const router = new Router({
       component: () => import('../views/register')
     },
     {
+      // 我的关注
+      path: '/follow',
+      name: 'follow',
+      component: () => import('../views/follow')
+    },
+    {
       // 我的收藏
       path: '*',
       component: () => import('../views/v404')
