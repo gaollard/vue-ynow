@@ -22,9 +22,8 @@
 
 <script>
 import Vue from 'vue'
-import { NavBar } from 'vant'
+import { NavBar, Toast } from 'vant'
 import ynowApi from '../../api/ynow'
-import { Toast } from 'vant'
 Vue.use(NavBar)
 
 export default {

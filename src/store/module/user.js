@@ -48,13 +48,10 @@ export default {
       }
       this.loading = true
       try {
-        let ret = await ynowApi.login({
-          mobile,
-          password
-        })
+        let ret = await ynowApi.login({ mobile, password })
         if (+ret.retCode === 0) {
           commit('setToken', ret.data.token)
-          commit('userInfo', ret.data)
+          commit('setUserInfo', ret.data)
           onSuccess && onSuccess()
         } else {
           throw ret.errMsg
@@ -76,13 +73,10 @@ export default {
       }
       this.loading = true
       try {
-        let ret = await ynowApi.register({
-          mobile,
-          password
-        })
+        let ret = await ynowApi.register({ mobile, password })
         if (+ret.retCode === 0) {
           commit('setToken', ret.data.token)
-          commit('userInfo', ret.data)
+          commit('setUserInfo', ret.data)
           onSuccess && onSuccess()
         } else {
           throw ret.errMsg

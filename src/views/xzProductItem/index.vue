@@ -22,7 +22,7 @@
       </div>
       <div class="name">{{ itemInfo.name }}</div>
       <div class="line"></div>
-      <div class="userInfo">
+      <div class="userInfo" @click="toUserProfile(itemInfo.user)">
         <div class="avatar-wrap">
           <img :src="itemInfo.user.avatar" />
         </div>
@@ -97,6 +97,9 @@ export default {
     this.doGetXzProductCollectState(2)
   },
   methods: {
+    toUserProfile (item) {
+      this.$router.push(`/userProfile/${item.id}`)
+    },
     onSwipeIndexChange (index) {
       this.current = index
     },
