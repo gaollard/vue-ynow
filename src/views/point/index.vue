@@ -1,9 +1,10 @@
 <template>
   <div class="view-point">
     <van-nav-bar
+      left-text="返回"
+      left-arrow
       title="我的积分"
-      @click-left="onClickLeft"
-      @click-right="onClickRight"
+      @click-left="$router.go(-1)"
     />
     <div class="content">
       <ul class="list">

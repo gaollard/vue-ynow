@@ -12,12 +12,7 @@
       <van-tabbar-item info="5" icon="chat-o" to="/chat">消息</van-tabbar-item>
       <van-tabbar-item icon="manager-o" to="/account">我的</van-tabbar-item>
     </van-tabbar>
-    <!-- <keep-alive> -->
-    <!-- <transition :name="translate" mode="out-in"> -->
-
-    <router-view class="view" :class="[{ 'has-tabbar': $route.meta.tabbar }, $route.name]" v-transition/>
-    <!-- </transition> -->
-    <!-- </keep-alive> -->
+    <router-view class="view" :class="[{ 'has-tabbar': $route.meta.tabbar }, $route.name]"/>
   </div>
 </template>
 

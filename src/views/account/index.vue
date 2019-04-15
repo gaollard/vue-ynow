@@ -19,7 +19,7 @@
       <router-link to="/collect">收藏</router-link>
       <router-link to="/like">喜欢</router-link>
       <router-link to="/point">积分</router-link>
-      <router-link to="/order">订单</router-link>
+      <!-- <router-link to="/order">订单</router-link> -->
     </div>
     <div class="card-link">
       <van-cell title="发布宝贝" to="/xzProductCreate" is-link />
