@@ -1,7 +1,7 @@
 <template>
   <div class="view-point">
     <van-nav-bar
-      title="我的收藏"
+      :title="title"
       left-text="返回"
       left-arrow
       @click-left="$router.go(-1)"
@@ -14,24 +14,14 @@
           :key="index"
           @click="switchPage('/xzProductItem/' + item.itemInfo.id)"
         >
-          <div
-            class="item-logo"
-            :style="{
-              'background-image': 'url(' + item.itemInfo.imgs[0] + ')'
-            }"
-          ></div>
+          <div class="item-logo" :style="{'background-image': 'url(' + item.itemInfo.imgs[0] + ')'}"></div>
           <div class="item-right">
             <div class="item-name">{{ item.itemInfo.name.substr(0, 45) }}</div>
             <div class="item-btm">
               <span class="item-price">￥{{ item.itemInfo.price / 100 }}</span>
-              <span class="item-discount">{{
-                item.itemInfo.depreciation
-              }}</span>
+              <span class="item-discount">{{ item.itemInfo.depreciation }}</span>
               <span class="item-postion">{{ item.itemInfo.position }}</span>
-              <span
-                class="item-btn"
-                @click.stop="doDeleteXzProductCollect(item)"
-                >取消收藏</span
+              <span class="item-btn" @click.stop="doDeleteXzProductCollect(item)">{{ cancelText }}</span
               >
             </div>
           </div>
@@ -53,13 +43,21 @@ export default {
       list: []
     }
   },
+  computed: {
+    typeId () {
+      return this.$route.query.typeId || 1
+    },
+    title () {
+      return +this.typeId === 1 ? '我的收藏' : '我的点赞'
+    },
+    cancelText () {
+      return +this.typeId === 1 ? '取消收藏' : '取消点赞'
+    }
+  },
   mounted () {
     this.doGetXzProductCollect()
   },
   methods: {
-    onClickLeft () {
-      this.$router.go(-1)
-    },
     switchPage (url) {
       this.$router.push(url)
     },

@@ -16,8 +16,8 @@
     </div>
     <div class="card-menu">
       <router-link to="/follow">关注</router-link>
-      <router-link to="/collect">收藏</router-link>
-      <router-link to="/like">喜欢</router-link>
+      <router-link to="/collect?typeId=1">收藏</router-link>
+      <router-link to="/collect?typeId=2">喜欢</router-link>
       <router-link to="/point">积分</router-link>
       <!-- <router-link to="/order">订单</router-link> -->
     </div>
