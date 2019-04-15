@@ -3,22 +3,17 @@
     <div class="login-form">
       <van-cell-group>
         <van-field v-model="mobile" placeholder="输入账户昵称" />
-        <van-field
-          v-model="password"
-          placeholder="输入登录密码"
-          type="password"
-        />
+        <van-field v-model="password" placeholder="输入登录密码" type="password"/>
       </van-cell-group>
       <van-button
         class="login-button"
         type="primary"
         size="large"
         :loading="loading"
-        @click="handleClick"
-        >立即注册</van-button
+        :disabled="disabled"
+        @click="handleClick">立即注册</van-button
       >
       <div class="btm-wrap">
-        <!-- <p class="tip-text">上述账户为测试账户</p> -->
         <div class="register-wrap">
           <span>已有账户？</span>
           <router-link class="register-link" to="/login">登录</router-link>
@@ -30,44 +25,35 @@
 
 <script>
 import Vue from 'vue'
-import ynowApi from '../../api/ynow'
-import { Field, Button, Toast } from 'vant'
-import cookies from 'js-cookie'
-import store from 'store'
-
+import { mapState } from 'vuex'
+import { Field, Button } from 'vant'
 Vue.use(Field).use(Button)
 
 export default {
   data () {
     return {
-      userInfo: null,
       mobile: '',
-      password: '',
-      nickname: '',
-      avatar: '',
-      loading: false
+      password: ''
+    }
+  },
+  computed: {
+    ...mapState({
+      loading: state => state.user.loading,
+      userInfo: state => state.user.userInfo
+    }),
+    disabled () {
+      return this.mobile.length !== 11 || this.password.length < 6
     }
   },
   methods: {
     async handleClick () {
-      this.loading = true
-      ynowApi
-        .register({
-          mobile: this.mobile,
-          password: this.password
-        })
-        .then(res => {
-          if (+res.errCode === 0) {
-            cookies.set('token', res.data.token)
-            store.set('userInfo', res.data)
-            this.$router.go(-1)
-          } else {
-            Toast(res.errMsg)
-          }
-        })
-        .finally(() => {
-          this.loading = false
-        })
+      await this.$store.dispatch('user/register', {
+        mobile: this.mobile,
+        password: this.password,
+        onSuccess: () => {
+          this.$router.go(-1)
+        }
+      })
     }
   }
 }

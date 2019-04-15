@@ -1,27 +1,27 @@
 <template>
   <div class="view-login">
-    <div class="login-form">
+    <div class="form">
       <van-cell-group>
         <van-field v-model="mobile" placeholder="输入账户昵称" />
-        <van-field
-          v-model="password"
-          placeholder="输入登录密码"
-          type="password"
-        />
+        <van-field v-model="password" placeholder="输入登录密码" type="password"/>
       </van-cell-group>
       <van-button
-        class="login-button"
+        class="button"
         type="primary"
         size="large"
         :loading="loading"
-        @click="handleClick"
-        >立即登录</van-button
+        :disabled="disabled"
+        @click="handleClick">立即{{ authType === LOGIN_TYPE ? '登录' : '注册' }}</van-button
       >
       <div class="btm-wrap">
-        <div class="register-wrap">
+        <template v-if="authType===LOGIN_TYPE">
           <span>没有账户？</span>
-          <router-link class="register-link" to="/register">注册</router-link>
-        </div>
+          <span class="btn-toggle" @click="authType=REGISTER_TYPE">注册</span>
+        </template>
+        <template v-else>
+          <span>已有账户？</span>
+          <span class="btn-toggle" @click="authType=LOGIN_TYPE">登录</span>
+        </template>
       </div>
     </div>
   </div>
@@ -29,60 +29,77 @@
 
 <script>
 import Vue from 'vue'
-import ynowApi from '../../api/ynow'
 import { Field, Button } from 'vant'
-import cookies from 'js-cookie'
-import store from 'store'
+import { mapState } from 'vuex'
 
 Vue.use(Field).use(Button)
+
+const LOGIN_TYPE = 1
+const REGISTER_TYPE = 2
 
 export default {
   data () {
     return {
-      userInfo: null,
       mobile: '',
       password: '',
-      loading: false
+      LOGIN_TYPE,
+      REGISTER_TYPE,
+      authType: LOGIN_TYPE
+    }
+  },
+  computed: {
+    ...mapState({
+      loading: state => state.user.loading,
+      userInfo: state => state.user.userInfo
+    }),
+    disabled () {
+      return this.mobile.length !== 11 || this.password.length < 6
+    },
+    redirect () {
+      return this.$route.query.redirect
+    }
+  },
+  created () {
+    if (this.$route.query.authType) {
+      this.authType = this.$route.query.authType
     }
   },
   methods: {
-    async handleClick () {
-      this.loading = true
-      ynowApi
-        .login({
-          mobile: this.mobile,
-          password: this.password
-        })
-        .then(res => {
-          cookies.set('token', res.data.token)
-          store.set('userInfo', res.data)
-          this.$router.go(-1)
-        })
+    handleClick () {
+      const dispatchName = this.authType === LOGIN_TYPE ? 'user/login' : 'user/register'
+      this.$store.dispatch(dispatchName, {
+        mobile: this.mobile,
+        password: this.password,
+        onSuccess: () => {
+          if (this.redirect) {
+            this.$router.push(this.redirect)
+          } else {
+            this.$router.go(-1)
+          }
+        }
+      })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.login-form {
+.form {
   padding: 12px;
 }
-.login-button {
+
+.button {
   margin-top: 20px;
 }
-.tip-text {
-  float: left;
-  margin-top: 10px;
-}
+
 .btm-wrap {
   color: #999;
   font-size: 14px;
-}
-.register-wrap {
-  float: right;
   margin-top: 10px;
+  text-align: right;
 }
-.register-link {
+
+.btn-toggle {
   color: #07c160;
 }
 </style>
