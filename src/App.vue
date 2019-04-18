@@ -47,8 +47,8 @@ export default {
   },
   mounted () {
     this.$store.dispatch('user/getUserInfo')
-    // this.$store.dispatch('chat/initSocket')
-    // this.$store.dispatch('chat/getChatList')
+    this.$store.dispatch('chat/initSocket')
+    this.$store.dispatch('chat/getChatList')
   }
 }
 </script>

@@ -38,7 +38,15 @@
     <div class="group group-comment">
       <div class="title">留言</div>
       <div class="line"></div>
-      <div class="list"></div>
+      <div class="list">
+        <div class="comment-item" v-for="(comment, index) in commentList" :key="index">
+          <div>
+            <img class="avatar" :src="comment.userInfo.avatar" alt="">
+            <span class="nickname">{{ comment.userInfo.nickname }}</span>
+          </div>
+          <div class="comment-item__content">{{ comment.content }}</div>
+        </div>
+      </div>
     </div>
     <div class="group group-btm">
       <div :class="{ 'is-active': isLiked }" @click="toggle(2)">
@@ -81,6 +89,7 @@ export default {
       likeData: null,
       collectData: null,
       current: 0,
+      commentList: [],
       swiperOption: {
         loop: true,
         pagination: {
@@ -92,6 +101,10 @@ export default {
   mounted () {
     ynowApi.getXzProductItem(this.$route.params.itemId).then(res => {
       this.itemInfo = res.data
+    })
+    ynowApi.getProductComment(this.$route.params.itemId).then(res => {
+      console.log(res)
+      this.commentList = res.data.list
     })
     this.doGetXzProductCollectState(1)
     this.doGetXzProductCollectState(2)
@@ -208,6 +221,31 @@ export default {
 .group {
   margin-bottom: 10px;
   background: #fff;
+}
+
+.group-comment {
+  .list {
+    padding-bottom: 10px;
+  }
+  .comment-item {
+    padding: 10px 12px;
+    padding-bottom: 0;
+    &__content {
+      padding-left: 37px;
+      color: #999;
+    }
+    > div {
+      display: flex;
+      align-items: center;
+    }
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+
+  }
 }
 
 .group-price {

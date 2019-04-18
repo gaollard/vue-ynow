@@ -112,5 +112,8 @@ export default {
   },
   checkLogin () {
     return http.get(`${host}/user/checkLogin`)
+  },
+  getProductComment (productId) {
+    return http.get(`${host}/xzProductComment?productId=${productId}`)
   }
 }
