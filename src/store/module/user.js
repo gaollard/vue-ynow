@@ -9,17 +9,27 @@ export default {
     return {
       token: '',
       userInfo: null,
-      loading: false
+      loading: false,
+      showLoginPop: false,
+      isValidLogin: false
     }
   },
   mutations: {
     setUserInfo (state, data) {
       state.userInfo = data
       store.set('userInfo', data)
+      if (data) {
+        state.isValidLogin = true
+      } else {
+        state.isValidLogin = false
+      }
     },
     setToken (state, data) {
       state.token = data
       cookies.set('token', data)
+    },
+    setSWhowLoginPop (state, data) {
+      state.showLoginPop = data
     }
   },
   actions: {
@@ -85,6 +95,25 @@ export default {
         Toast(error.toString())
       }
       this.loading = false
+    },
+
+    // 展示登录弹窗
+    showLoginPop ({ commit }) {
+      commit('setSWhowLoginPop', true)
+    },
+
+    // 关闭登录弹窗
+    closeLoginPop ({ commit }) {
+      commit('setSWhowLoginPop', false)
+    },
+
+    // 登录判断
+    loginFilter ({ commit, state, dispatch }, { onLogin }) {
+      if (state.isValidLogin) {
+        onLogin && onLogin()
+      } else {
+        dispatch('showLoginPop')
+      }
     }
   }
 }

@@ -13,16 +13,24 @@
       <van-tabbar-item icon="manager-o" to="/account">我的</van-tabbar-item>
     </van-tabbar>
     <router-view class="view" :class="[{ 'has-tabbar': $route.meta.tabbar }, $route.name]"/>
+    <div class="login-pop" v-show="$store.state.user.showLoginPop">
+      <span @click="$store.dispatch('user/closeLoginPop')">X</span>
+      <LoginPop></LoginPop>
+    </div>
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
 import { Tabbar, TabbarItem } from 'vant'
+import LoginPop from './views/login'
 Vue.use(Tabbar).use(TabbarItem)
 
 export default {
   name: 'App',
+  components: {
+    LoginPop
+  },
   data () {
     return {
       activeIndex: 0,
@@ -58,6 +66,16 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.login-pop {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 998;
+  background: #fff;
 }
 
 .has-tabbar {

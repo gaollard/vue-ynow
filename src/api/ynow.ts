@@ -113,7 +113,15 @@ export default {
   checkLogin () {
     return http.get(`${host}/user/checkLogin`)
   },
-  getProductComment (productId) {
-    return http.get(`${host}/xzProductComment?productId=${productId}`)
+  getProductComment (itemId) {
+    return http.get(`${host}/xzProductComment?itemId=${itemId}`)
+  },
+  // 增加评论
+  addProductComment ({ itemId, content, talkTo, typeId }) {
+    return http.post(`${host}/xzProductComment?itemId=${itemId}`, {
+      talkTo,
+      typeId,
+      content
+    })
   }
 }
