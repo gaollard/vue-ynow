@@ -15,15 +15,17 @@
     <router-view class="view" :class="[{ 'has-tabbar': $route.meta.tabbar }, $route.name]"/>
     <div class="login-pop" v-show="$store.state.user.showLoginPop">
       <span @click="$store.dispatch('user/closeLoginPop')">X</span>
-      <LoginPop></LoginPop>
+      <LoginPop :onLogin="onLogin"></LoginPop>
     </div>
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
+import { mapState } from 'vuex'
 import { Tabbar, TabbarItem } from 'vant'
 import LoginPop from './views/login'
+
 Vue.use(Tabbar).use(TabbarItem)
 
 export default {
@@ -40,10 +42,24 @@ export default {
       translate: 'fade'
     }
   },
+  computed: {
+    ...mapState({
+      isValidLogin: state => state.user.isValidLogin
+    })
+  },
   watch: {
     '$route': {
       handler (val) {
         this.currentRoute = val
+      },
+      immediate: true
+    },
+    isValidLogin: {
+      handler (val) {
+        if (val) {
+          this.$store.dispatch('chat/initSocket')
+          this.$store.dispatch('chat/getChatList')
+        }
       },
       immediate: true
     }
@@ -51,12 +67,13 @@ export default {
   methods: {
     handleChange (index) {
       this.activeIndex = index
+    },
+    onLogin () {
+      this.$store.dispatch('user/closeLoginPop')
     }
   },
   mounted () {
     this.$store.dispatch('user/getUserInfo')
-    this.$store.dispatch('chat/initSocket')
-    this.$store.dispatch('chat/getChatList')
   }
 }
 </script>

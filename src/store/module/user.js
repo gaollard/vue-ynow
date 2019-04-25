@@ -18,6 +18,8 @@ export default {
     setUserInfo (state, data) {
       state.userInfo = data
       store.set('userInfo', data)
+      console.log(data)
+      console.log(state.isValidLogin)
       if (data) {
         state.isValidLogin = true
       } else {
@@ -40,7 +42,12 @@ export default {
     async getUserInfo ({ commit }) {
       try {
         let ret = await ynowApi.getUserInfo()
-        commit('setUserInfo', +ret.retCode === 0 ? ret.data : null)
+        if (+ret.retCode === 0) {
+          commit('setUserInfo', ret.data)
+        } else {
+          commit('setUserInfo', null)
+          // Toast(ret.errMsg)
+        }
       } catch (error) {
         commit('setUserInfo', null)
       }

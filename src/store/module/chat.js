@@ -5,8 +5,6 @@ import { wsHost } from '../../config'
 
 // browser
 const log = console.log
-const userInfo = store.get('userInfo')
-
 let socketInstance = null
 
 export default {
@@ -28,11 +26,12 @@ export default {
   },
   actions: {
     // 初始化 socket
-    initSocket ({ dispatch }) {
+    initSocket ({ dispatch, rootState }) {
+      const userInfo = rootState.user.userInfo
       const socket = io(wsHost, {
         query: {
           room: 'demo',
-          token: userInfo.token || Math.random()
+          token: userInfo ? userInfo.token : Math.random()
         },
         transports: ['websocket']
       })
@@ -51,7 +50,6 @@ export default {
         //   dispatch('getChatList');
         // });
         socket.on('sendMsg', msg => {
-          console.log(msg)
           dispatch('getChatList')
           dispatch('scrollToLast')
         })
@@ -82,7 +80,8 @@ export default {
     },
 
     // 获取所有的聊天信息
-    getChatList ({ state, commit }) {
+    getChatList ({ state, commit, rootState }) {
+      const userInfo = rootState.user.userInfo
       ynowApi.getChatList().then(res => {
         const msgList = res.data.msgList
         const userList = res.data.userList
@@ -138,7 +137,8 @@ export default {
         })
       })
     },
-    sendMsg ({ state, commit }, { to, content }) {
+    sendMsg ({ state, commit, rootState }, { to, content }) {
+      const userInfo = rootState.user.userInfo
       const payload = {
         to,
         content,
@@ -149,8 +149,10 @@ export default {
       })
     },
     scrollToLast () {
-      const dom = document.querySelector('.view.chatItem .content')
-      dom.scrollTop = dom.scrollHeight + 100
+      setTimeout(() => {
+        var dom = document.querySelector('.view.chatItem .content')
+        dom.scrollTop = dom.scrollHeight + 1000
+      }, 500)
     }
   }
 }

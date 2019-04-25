@@ -38,6 +38,9 @@ const LOGIN_TYPE = 1
 const REGISTER_TYPE = 2
 
 export default {
+  props: {
+    onLogin: Function
+  },
   data () {
     return {
       mobile: '',
@@ -71,6 +74,9 @@ export default {
         mobile: this.mobile,
         password: this.password,
         onSuccess: () => {
+          if (this.onLogin) {
+            return this.onLogin()
+          }
           if (this.redirect) {
             this.$router.push(this.redirect)
           } else {
