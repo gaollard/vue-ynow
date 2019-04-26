@@ -123,5 +123,13 @@ export default {
       typeId,
       content
     })
+  },
+  // 获取用户介绍信息
+  getUserProfile ({ uid }) {
+    return http.get(`${host}/user/profile?uid=${uid}`)
+  },
+  // 获取我的关注
+  getFollowList () {
+    return http.get(`${host}/user/follow`)
   }
 }

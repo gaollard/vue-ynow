@@ -1,14 +1,14 @@
 <template>
-  <div class="view">
+  <div class="view" v-if="userInfo">
     <div class="card-banner">
       <div class="blur-bg" :style="stl"></div>
       <div class="box">
         <div class="userInfo">
-          <img class="avatar" :src="avatar" alt="">
-          <p class="account">伸手居士</p>
+          <img class="avatar" :src="userInfo.avatar" alt="">
+          <p class="account">{{ userInfo.nickname }}</p>
           <p class="nickname">昵称：独到之处找我</p>
         </div>
-        <div class="desc">现居北京。90后双子座男生。学生行业。北京交通大学毕业。研究生在读。</div>
+        <div class="desc">现居{{ userInfo.residence }}，{{ userInfo.college }}毕业。</div>
         <div class="ui-flex assets">
           <div>50超赞</div>
           <div>2关注</div>
@@ -23,12 +23,15 @@
 <script>
 // 他人的封面
 import { Button } from 'vant'
+import ynowApi from '../../api/ynow'
+
 export default {
   comments: {
     [Button.name]: Button
   },
   data () {
     return {
+      userInfo: null,
       avatar: 'http://ci.xiaohongshu.com/e7eb4800-5850-3129-9196-af9a511849ba?imageView2/2/w/828/q/82/format/jpg'
     }
   },
@@ -38,6 +41,18 @@ export default {
         'background-image': `url(${this.avatar})`,
         color: 'red'
       }
+    }
+  },
+  mounted () {
+    this.doGetUserProfile()
+  },
+  methods: {
+    async doGetUserProfile () {
+      let ret = await ynowApi.getUserProfile({
+        uid: this.$route.params.userId
+      })
+      this.userInfo = ret.data
+      console.log(ret)
     }
   }
 }

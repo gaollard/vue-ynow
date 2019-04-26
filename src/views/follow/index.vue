@@ -33,7 +33,13 @@ export default {
       loading: false
     }
   },
-  mounted () {
+  async mounted () {
+    try {
+      let ret = await ynowApi.getFollowList()
+      console.log(ret)
+    } catch (error) {
+      console.log(error)
+    }
     this.getDataList()
   },
   methods: {
