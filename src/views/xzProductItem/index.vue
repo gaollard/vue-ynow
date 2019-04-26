@@ -188,7 +188,7 @@ export default {
 
     // 调转到用户简介界面
     toUserProfile (item) {
-      this.$router.push(`/userProfile/${item.id}`)
+      this.$router.push(`/user/profile/${item.id}`)
     },
 
     // 商品图片轮播

@@ -143,7 +143,7 @@ const router = new Router({
     },
     {
       // 我的关注
-      path: '/userProfile/:userId',
+      path: '/user/profile/:userId',
       name: 'userProfile',
       component: () => import('../views/userProfile')
     },

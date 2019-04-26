@@ -4,7 +4,7 @@
       <div class="blur-bg" :style="stl"></div>
       <div class="box">
         <div class="userInfo">
-          <img class="avatar" :src="userInfo.avatar" alt="">
+          <img class="avatar" :src="userInfo.avatar">
           <p class="account">{{ userInfo.nickname }}</p>
           <p class="nickname">昵称：独到之处找我</p>
         </div>
@@ -14,15 +14,14 @@
           <div>2关注</div>
           <div>57粉丝</div>
         </div>
-        <van-button class="follow" size="small" type="primary">+关注</van-button>
+        <van-button class="follow" size="small" type="primary" @click="handleFollow">+关注</van-button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-// 他人的封面
-import { Button } from 'vant'
+import { Button, Toast } from 'vant'
 import ynowApi from '../../api/ynow'
 
 export default {
@@ -31,15 +30,13 @@ export default {
   },
   data () {
     return {
-      userInfo: null,
-      avatar: 'http://ci.xiaohongshu.com/e7eb4800-5850-3129-9196-af9a511849ba?imageView2/2/w/828/q/82/format/jpg'
+      userInfo: null
     }
   },
   computed: {
     stl () {
       return {
-        'background-image': `url(${this.avatar})`,
-        color: 'red'
+        'background-image': `url(${this.userInfo.avatar})`
       }
     }
   },
@@ -47,12 +44,40 @@ export default {
     this.doGetUserProfile()
   },
   methods: {
+    /**
+     * 获取用户介绍信息
+     */
     async doGetUserProfile () {
-      let ret = await ynowApi.getUserProfile({
-        uid: this.$route.params.userId
-      })
-      this.userInfo = ret.data
-      console.log(ret)
+      try {
+        let ret = await ynowApi.getUserProfile({
+          uid: this.$route.params.userId
+        })
+        if (+ret.retCode === 0) {
+          this.userInfo = ret.data
+        } else {
+          Toast(ret.errMsg)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    /**
+     * 添加关注
+     */
+    async handleFollow () {
+      try {
+        let ret = await ynowApi.addFollow({
+          followId: this.$route.params.userId
+        })
+        if (+ret.retCode === 0) {
+          Toast.success('添加成功')
+        } else {
+          Toast(ret.errMsg)
+        }
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 }

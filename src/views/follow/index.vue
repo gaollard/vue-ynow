@@ -8,12 +8,16 @@
     />
     <div class="ui-content ui-content--full">
       <ul class="list">
-        <li class="item" v-for="(item, index) in list" :key="index">
+        <li class="item"
+          v-for="(item, index) in userList"
+          :key="index"
+          @click="switchUserProfile(item.userInfo)"
+        >
           <div class="ui-flex">
-            <img class="item-avatar" :src="item.avatar" alt="">
-            <span class="item-nickName">{{ item.nickName }}</span>
+            <img class="item-avatar" :src="item.userInfo.avatar">
+            <span class="item-nickName">{{ item.userInfo.nickname }}</span>
           </div>
-          <span class="follow-btn">已关注</span>
+          <van-button class="follow-btn" @click.stop="cancleFollow(index)" size="small">取消关注</van-button>
         </li>
       </ul>
     </div>
@@ -22,41 +26,66 @@
 
 <script>
 import Vue from 'vue'
-import { NavBar, Toast } from 'vant'
+import { NavBar, Toast, Button } from 'vant'
 import ynowApi from '../../api/ynow'
-Vue.use(NavBar)
+Vue.use(NavBar).use(Button)
 
 export default {
   data () {
     return {
-      list: [],
-      loading: false
+      loading: false,
+      userList: []
     }
   },
   async mounted () {
-    try {
-      let ret = await ynowApi.getFollowList()
-      console.log(ret)
-    } catch (error) {
-      console.log(error)
-    }
-    this.getDataList()
+    this.initPageData()
   },
   methods: {
+    // 获取关注列表
     async getDataList () {
-      Toast.loading('加载中...')
-      let res = await ynowApi.getPointList()
-      if (+res.errCode === 0) {
-        let list = []
-        for (let index = 0; index < 5; index++) {
-          list.push({
-            avatar: '//ci.xiaohongshu.com/e7eb4800-5850-3129-9196-af9a511849ba?imageView2/2/w/828/q/82/format/jpg',
-            nickName: '花玉山'
-          })
+      Toast.loading('加载中')
+      this.loading = true
+      try {
+        let ret = await ynowApi.getFollowList()
+        if (+ret.retCode === 0) {
+          this.userList = ret.data.list
+        } else {
+          Toast(ret.errMsg)
         }
-        this.list = list
+      } catch (error) {
+        console.log(error)
       }
       Toast.clear()
+      this.loading = false
+    },
+
+    // 跳转到用户简介界面
+    async switchUserProfile (userInfo) {
+      this.$router.push(`/user/profile/${userInfo.id}`)
+    },
+
+    // 取消关注
+    async cancleFollow (index) {
+      Toast.loading('加载中')
+      try {
+        let ret = await ynowApi.removeFollow({
+          followId: this.userList[index].follow_id
+        })
+        if (+ret.retCode === 0) {
+          Toast.success('取消成功')
+          this.userList.splice(index, 1)
+        } else {
+          Toast(ret.errMsg)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+      Toast.clear()
+    },
+
+    // 加载页面数据
+    async initPageData () {
+      await this.getDataList()
     }
   }
 }

@@ -131,5 +131,15 @@ export default {
   // 获取我的关注
   getFollowList () {
     return http.get(`${host}/user/follow`)
+  },
+  // 添加关注
+  addFollow ({ followId }) {
+    return http.post(`${host}/user/follow`, {
+      followId
+    })
+  },
+  // 取消关注
+  removeFollow ({ followId }) {
+    return http.delete(`${host}/user/follow/${followId}`)
   }
 }
