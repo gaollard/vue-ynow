@@ -1,25 +1,31 @@
 <template>
   <div class="view-follow">
-    <van-nav-bar
-      left-text="返回"
-      left-arrow
-      title="我的关注"
-      @click-left="$router.go(-1)"
-    />
-    <div class="ui-content ui-content--full">
-      <ul class="list">
-        <li class="item"
-          v-for="(item, index) in userList"
-          :key="index"
-          @click="switchUserProfile(item.userInfo)"
-        >
-          <div class="ui-flex">
-            <img class="item-avatar" :src="item.userInfo.avatar">
-            <span class="item-nickName">{{ item.userInfo.nickname }}</span>
-          </div>
-          <van-button class="follow-btn" @click.stop="cancleFollow(index)" size="small">取消关注</van-button>
-        </li>
-      </ul>
+    <template v-if="userList.length">
+      <van-nav-bar
+        left-text="返回"
+        left-arrow
+        title="我的关注"
+        @click-left="$router.go(-1)"
+      />
+      <div class="ui-content ui-content--full">
+        <ul class="list">
+          <li class="item"
+            v-for="(item, index) in userList"
+            :key="index"
+            @click="switchUserProfile(item.userInfo)"
+            v-show="item.follow_id != userInfo.id"
+          >
+            <div class="ui-flex">
+              <img class="item-avatar" :src="item.userInfo.avatar">
+              <span class="item-nickName">{{ item.userInfo.nickname }}</span>
+            </div>
+            <van-button class="follow-btn" @click.stop="cancleFollow(index)" size="small">取消关注</van-button>
+          </li>
+        </ul>
+      </div>
+    </template>
+    <div v-else>
+      <div v-if="!loading">-暂无数据-</div>
     </div>
   </div>
 </template>
@@ -28,6 +34,7 @@
 import Vue from 'vue'
 import { NavBar, Toast, Button } from 'vant'
 import ynowApi from '../../api/ynow'
+import { mapState } from 'vuex'
 Vue.use(NavBar).use(Button)
 
 export default {
@@ -36,6 +43,11 @@ export default {
       loading: false,
       userList: []
     }
+  },
+  computed: {
+    ...mapState({
+      userInfo: state => state.user.userInfo
+    })
   },
   async mounted () {
     this.initPageData()

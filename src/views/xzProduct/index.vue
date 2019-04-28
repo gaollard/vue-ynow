@@ -6,15 +6,11 @@
         v-for="(item, index) in list"
         :key="index"
         :to="'/xzProductItem/' + item.id"
-        v-if="item.imgs && item.imgs.length"
       >
         <div>
-          <div
-            class="p-img"
-            :style="{ backgroundImage: 'url(' + item.imgs[0] + ')' }"
-          ></div>
+          <div class="p-img" :style="{ backgroundImage: 'url(' + item.imgs[0] + ')' }"></div>
           <div class="p-info">
-            <p class="p-name">{{ item.name }}</p>
+            <p class="p-name">{{ item.title }} {{ item.description }}</p>
             <p class="p-price">￥{{ item.price / 100 }}</p>
           </div>
           <div class="line"></div>
@@ -82,10 +78,12 @@ export default {
 }
 
 .p-name {
-  text-align: justify;
-  max-height: 40px;
+  font-size: 13px;
+  color: #222;
+  height: 40px;
+  line-height: 20px;
   overflow: hidden;
-  text-overflow: ellipsis;
+  text-align: justify;
 }
 
 .p-price {

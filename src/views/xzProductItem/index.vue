@@ -13,7 +13,7 @@
         <span>¥{{ itemInfo.price / 100 }}元</span>
         <span class="depreciation">{{ itemInfo.depreciation }}</span>
       </div>
-      <div class="name">{{ itemInfo.name }}</div>
+      <div class="name">{{ itemInfo.title }} {{ itemInfo.description }}</div>
       <div class="line"></div>
       <div class="userInfo" @click="toUserProfile(itemInfo.user)">
         <div class="avatar-wrap">

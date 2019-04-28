@@ -1,18 +1,45 @@
 <template>
   <div class="view">
     <van-nav-bar
-      title="我的收藏"
+      title="发布闲置"
       left-text="返回"
       left-arrow
       @click-left="$router.go(-1)"
     />
     <div class="content">
-      <van-field v-model="form.name" placeholder="商品名称" />
-      <van-field v-model="form.price" placeholder="商品价格" />
-      <van-field v-model="form.depreciation" placeholder="商品成色" />
-      <van-field v-model="form.description" placeholder="商品描述" />
-      <van-field v-model="form.position" placeholder="商品交易所在城市" />
-
+      <!-- 填写标题 -->
+      <van-field v-model="form.title" placeholder="标题(品牌型号都是买家喜欢搜索的关键词)" />
+      <!-- 填写价格 -->
+      <van-field v-model="form.price" placeholder="价格(单位为元)" />
+      <!-- 成色 -->
+      <van-field v-model="form.depreciation" placeholder="成色(1-100)" type="number" />
+      <!-- 填写描述 -->
+      <van-field v-model="form.description" placeholder="描述(入手渠道使用感受等)" type="textarea" />
+      <!-- 选择分类 -->
+      <van-field
+        v-model="form.categoryName"
+        placeholder="分类(有助于买家快速筛选)"
+        :readonly="true"
+        :is-link="true"
+        @click.native="showCategoryPicker=true"
+      />
+      <!-- 选择交易方式 -->
+      <van-field
+        v-model="form.tradeWayName"
+        placeholder="交易方式"
+        :readonly="true"
+        :is-link="true"
+        @click.native="showTradeWayPicker=true"
+      />
+      <!-- 选择交易方式 -->
+      <van-field
+        v-model="form.city"
+        placeholder="宝贝所在城市"
+        :readonly="true"
+        :is-link="true"
+        @click.native="showCityPicker=true"
+      />
+      <!-- 上传图片 -->
       <div class="upload-wrap">
         <div class="preview-box" v-for="(item, index) in pickList" :key="index">
           <img class="pre-item" :src="item.content" />
@@ -27,18 +54,29 @@
           </template>
         </van-uploader>
       </div>
-
-      <van-cell title="是否上架">
+      <van-cell class="ui-flex" title="是否上架">
         <van-switch v-model="checked" />
       </van-cell>
     </div>
+
     <van-button
       class="btm-fixed"
       size="large"
       type="primary"
-      @click="doCreateProduct"
-      >提交</van-button
-    >
+      @click="handleSubmit">提交</van-button>
+
+    <!-- 分类picker -->
+    <categoryPicker v-model="showCategoryPicker" @on-change="onCategoryChange" />
+    <!-- 交易方式picker -->
+    <tradeWayPicker v-model="showTradeWayPicker" @on-change="onTradeWayChange" />
+    <!-- 选择城市picker -->
+    <cityPicker v-model="showCityPicker" @on-confirm="onCityChange" />
+
+    <van-dialog v-model="showFormError" title="您提交的参数不规范">
+      <ul class="error-list">
+        <li v-for="(item, index) in errors" :key="index">{{ index + 1 }}. {{ item }}</li>
+      </ul>
+    </van-dialog>
   </div>
 </template>
 
@@ -52,10 +90,14 @@ import {
   CellGroup,
   Uploader,
   Toast,
-  Button
+  Button,
+  Dialog
 } from 'vant'
 import ynowApi from '../../api/ynow'
 import * as qiniu from 'qiniu-js'
+import cityPicker from '../../components/cityPicker'
+import categoryPicker from '../../components/categoryPicker'
+import tradeWayPicker from '../../components/tradeWayPicker'
 
 Vue.use(NavBar)
   .use(Field)
@@ -64,22 +106,38 @@ Vue.use(NavBar)
   .use(CellGroup)
   .use(Button)
   .use(Uploader)
+  .use(Dialog)
 
 export default {
+  components: {
+    cityPicker,
+    categoryPicker,
+    tradeWayPicker
+  },
   data () {
     return {
       checked: '',
       form: {
-        price: '100000',
-        name:
-          '转让iphone6Splus64g 转让闲置iphone6splus64g玫瑰金！成色跟新机差不多！前后贴膜一直带后壳使',
-        position: '北京东城区',
-        description:
-          '转让iphone6Splus64g 转让闲置iphone6splus64g玫瑰金！成色跟新机差不多！前后贴膜一直带后壳使',
-        depreciation: '9成新'
+        price: '',
+        title: '',
+        city: '',
+        description: '',
+        depreciation: '',
+        categoryId: '',
+        categoryName: '',
+        tradeWayId: '',
+        tradeWayName: ''
       },
       pickList: [],
-      token: ''
+      token: '',
+      categoryValue: null,
+      showCategoryPicker: false,
+      tradeWayPickerValue: null,
+      showTradeWayPicker: false,
+      cityPickerValue: null,
+      showCityPicker: false,
+      errors: [],
+      showFormError: false
     }
   },
   mounted () {
@@ -93,10 +151,17 @@ export default {
     removeItem (index) {
       this.pickList.splice(index, 1)
     },
-    doGet7nToken () {
-      ynowApi.get7nToken().then(res => {
-        this.token = res.data.token
-      })
+    async doGet7nToken () {
+      try {
+        let ret = await ynowApi.get7nToken()
+        if (+ret.errCode === 0) {
+          this.token = ret.data.token
+        } else {
+          Toast(ret.errMsg)
+        }
+      } catch (error) {
+        console.log(error)
+      }
     },
     uploadImg (index, file, callback) {
       const vm = this
@@ -116,24 +181,94 @@ export default {
         }
       })
     },
-    doCreateProduct () {
-      let imgs = this.pickList.map(element => element.url)
-      imgs = JSON.stringify(imgs)
-      const params = Object.assign(
-        {
-          imgs
-        },
-        this.form
-      )
-      ynowApi.createXzProduct(params).then(res => {
-        Toast('上传成功')
+    async doCreateProduct () {
+      try {
+        let imgs = this.pickList.map(element => element.url)
+        imgs = JSON.stringify(imgs)
+        const params = {
+          ...this.form,
+          imgs: imgs
+        }
+        let ret = await ynowApi.createXzProduct(params)
+        if (+ret.errCode === 0) {
+          Toast.success('发布成功')
+        } else {
+          Toast(ret.errMsg)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    handleSubmit () {
+      const form = this.form
+      const errors = this.errors
+      if (form.title.length < 5) {
+        errors.push('标题长度不能小于5')
+      }
+      if (form.price.length === 0) {
+        errors.push('价格不能为空')
+      }
+      if (form.city.length === 0) {
+        errors.push('宝贝所在城市不能为空')
+      }
+      if (form.depreciation.length === 0) {
+        errors.push('宝贝成色不能为空')
+      }
+      if (form.categoryId.length === 0) {
+        errors.push('宝贝分类不能为空')
+      }
+      if (form.tradeWayId.length === 0) {
+        errors.push('交易方式不能为空')
+      }
+      if (this.pickList.length < 2) {
+        errors.push('宝贝图片不能小于2张')
+      }
+
+      this.showFormError = !!errors.length
+      if (!this.showFormError) {
+        this.doCreateProduct()
+      }
+    },
+    onCategoryChange (data) {
+      this.categoryValue = data
+      this.form.categoryId = data.id
+      this.form.categoryName = data.name
+    },
+    onTradeWayChange (data) {
+      this.tradeWayPickerValue = data
+      this.form.tradeWayId = data.id
+      this.form.tradeWayName = data.name
+    },
+    onCityChange (data) {
+      this.cityPickerValue = data
+      let values = []
+      data.forEach(element => {
+        values.push(element.name)
       })
+      this.form.city = values.join(' ')
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.ui-flex {
+  display: flex;
+  align-items: center;
+  /deep/ .van-cell__value {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+}
+
+.error-list {
+  padding: 14px 20px;
+  font-size: 14px;
+  color: #999;
+}
+
+// 图片上传
 .upload-wrap {
   float: right;
   padding: 20px 0;

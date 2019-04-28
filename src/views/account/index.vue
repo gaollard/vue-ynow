@@ -17,12 +17,12 @@
     <div class="card-menu">
       <router-link to="/follow">关注</router-link>
       <router-link to="/collect?typeId=1">收藏</router-link>
-      <router-link to="/collect?typeId=2">喜欢</router-link>
+      <router-link to="/collect?typeId=2">点赞</router-link>
       <router-link to="/point">积分</router-link>
       <!-- <router-link to="/order">订单</router-link> -->
     </div>
     <div class="card-link">
-      <van-cell title="发布宝贝" to="/xzProductCreate" is-link />
+      <van-cell title="发布闲置" to="/xzProductCreate" is-link />
       <van-cell title="我的发布" to="/myProdcust"  is-link />
       <van-cell title="地址管理" to="/DeliveryAddress" is-link />
       <van-cell title="账户设置" to="/userInfo" is-link />

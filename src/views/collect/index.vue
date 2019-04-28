@@ -16,11 +16,11 @@
         >
           <div class="item-logo" :style="{'background-image': 'url(' + item.itemInfo.imgs[0] + ')'}"></div>
           <div class="item-right">
-            <div class="item-name">{{ item.itemInfo.name.substr(0, 45) }}</div>
+            <div class="item-name">{{ item.itemInfo.title.substr(0, 45) }}</div>
             <div class="item-btm">
-              <span class="item-price">￥{{ item.itemInfo.price / 100 }}</span>
+              <span class="item-price">￥{{ item.itemInfo.price }}</span>
               <span class="item-discount">{{ item.itemInfo.depreciation }}</span>
-              <span class="item-postion">{{ item.itemInfo.position }}</span>
+              <span class="item-postion">{{ item.itemInfo.city }}</span>
               <span class="item-btn" @click.stop="doDeleteXzProductCollect(item)">{{ cancelText }}</span
               >
             </div>
@@ -62,7 +62,7 @@ export default {
       this.$router.push(url)
     },
     doGetXzProductCollect () {
-      ynowApi.getXzProductCollect({ typeId: 1 }).then(res => {
+      ynowApi.getXzProductCollect({ typeId: this.typeId }).then(res => {
         this.list = res.data.list
       })
     },
