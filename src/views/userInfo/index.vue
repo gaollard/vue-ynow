@@ -25,10 +25,9 @@
           <template>
             <van-uploader class="touch-area" :after-read="onRead">
               <template v-if="!userInfoCache.avatar">
-                +
-                <!-- <img class="icon-add" src="./img/add.png"> -->
+                <span>+</span>
               </template>
-              <img v-else :src="userInfoCache.avatar" />
+              <img class="avatar" v-else :src="userInfoCache.avatar" />
             </van-uploader>
           </template>
         </van-cell>
@@ -143,5 +142,13 @@ export default {
 <style scoped>
 .touch-area {
   width: 100px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: 50%;
 }
 </style>
