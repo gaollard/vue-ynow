@@ -294,7 +294,7 @@ export default {
     // 参数校验
     handleSubmit () {
       const form = this.form
-      const errors = this.errors
+      const errors = []
       if (form.title.length < 5) {
         errors.push('标题长度不能小于5')
       }
@@ -316,6 +316,7 @@ export default {
       if (this.pickList.length < 2) {
         errors.push('宝贝图片不能小于2张')
       }
+      this.errors = errors
       this.showFormError = !!errors.length
       if (!this.showFormError) {
         if (this.$route.query.itemId) {

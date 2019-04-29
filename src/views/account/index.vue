@@ -25,7 +25,7 @@
       <van-cell title="我的发布" @click="authSwitch('/user/product')" is-link />
       <van-cell title="地址管理" @click="authSwitch('/DeliveryAddress')" is-link />
       <van-cell title="账户设置" @click="authSwitch('/userInfo')" is-link />
-      <!-- <van-cell title="立即登录" is-link /> -->
+      <van-cell title="立即登录" @click="$router.push('/login')" is-link />
     </div>
   </div>
 </template>
