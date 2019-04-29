@@ -386,7 +386,7 @@ export default {
   }
   .list {
     > .comment-item {
-      &:last-child {
+      &:last-child .border {
         border-bottom: 0;
       }
     }

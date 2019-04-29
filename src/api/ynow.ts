@@ -43,7 +43,10 @@ export default {
 
   // 获取闲置商品
   getXzProductList () {
-    return http.get(`${host}/xzProduct`)
+    const argv = arguments[0]
+    const categoryId = argv ? (argv.categoryId || '') : ''
+    console.log(11, categoryId)
+    return http.get(`${host}/xzProduct?categoryId=${categoryId}`)
   },
 
   // 获取闲置商品详情
