@@ -18,8 +18,6 @@ export default {
     setUserInfo (state, data) {
       state.userInfo = data
       store.set('userInfo', data)
-      console.log(data)
-      console.log(state.isValidLogin)
       if (data) {
         state.isValidLogin = true
       } else {

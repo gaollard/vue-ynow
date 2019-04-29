@@ -1,12 +1,13 @@
 <template>
   <div class="popup" v-if="value">
     <van-picker
+      ref="picker"
       class="picker"
       show-toolbar
       title="选择分类"
       :loading="loading"
       :columns="list"
-      :default-index="2"
+      :defualt-index="3"
       value-key="name"
       @cancel="onCancel"
       @confirm="onConfirm"
@@ -18,7 +19,6 @@
 import Vue from 'vue'
 import { Loading, Picker, Toast, Popup } from 'vant'
 import ynowApi from '../../api/ynow'
-
 Vue.use(Loading).use(Picker).use(Popup)
 
 export default {
@@ -26,16 +26,18 @@ export default {
     value: {
       type: Boolean,
       default: false
-    },
-    defaultIndex: {
-      type: Number,
-      default: 0
     }
   },
   data () {
     return {
       list: [],
-      loading: false
+      loading: false,
+      index: 1
+    }
+  },
+  watch: {
+    value (val) {
+      console.log(val)
     }
   },
   async mounted () {
@@ -54,11 +56,10 @@ export default {
   },
   methods: {
     onCancel () {
-      this.$emit('input', false)
+      this.$emit('on-cancel')
     },
     onConfirm (data) {
-      this.$emit('on-change', data)
-      this.$emit('input', false)
+      this.$emit('on-confirm', data)
     }
   }
 }

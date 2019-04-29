@@ -148,6 +148,12 @@ const router = new Router({
       component: () => import('../views/userProfile')
     },
     {
+      // 我的宝贝
+      path: '/user/product',
+      name: 'userProduct',
+      component: () => import('../views/userProduct')
+    },
+    {
       // 我的收藏
       path: '*',
       component: () => import('../views/v404')

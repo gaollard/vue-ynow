@@ -15,21 +15,9 @@
 
 <script>
 import Vue from 'vue'
-import ynowApi from '../../api/ynow'
-import { Loading, Picker, Toast, Popup } from 'vant'
-
+import { Loading, Picker, Popup } from 'vant'
+import { tradeWay } from '../../config'
 Vue.use(Loading).use(Picker).use(Popup)
-
-const columns = [{
-  name: '邮寄',
-  id: 1
-}, {
-  name: '自提',
-  id: 2
-}, {
-  name: '同城面交',
-  id: 3
-}]
 
 export default {
   props: {
@@ -44,17 +32,16 @@ export default {
   },
   data () {
     return {
-      columns: columns,
+      columns: tradeWay,
       loading: false
     }
   },
   methods: {
     onCancel () {
-      this.$emit('input', false)
+      this.$emit('on-cancel')
     },
     onConfirm (data) {
-      this.$emit('on-change', data)
-      this.$emit('input', false)
+      this.$emit('on-confirm', data)
     }
   }
 }

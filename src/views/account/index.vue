@@ -15,18 +15,17 @@
       <div class="btn-login" @click="$router.push('/login')">登录/注册</div>
     </div>
     <div class="card-menu">
-      <router-link to="/follow">关注</router-link>
-      <router-link to="/collect?typeId=1">收藏</router-link>
-      <router-link to="/collect?typeId=2">点赞</router-link>
-      <router-link to="/point">积分</router-link>
-      <!-- <router-link to="/order">订单</router-link> -->
+      <div @click="authSwitch('/follow')">关注</div>
+      <div @click="authSwitch('/collect?typeId=1')">收藏</div>
+      <div @click="authSwitch('/collect?typeId=2')">点赞</div>
+      <div @click="authSwitch('/point')">积分</div>
     </div>
     <div class="card-link">
-      <van-cell title="发布闲置" to="/xzProductCreate" is-link />
-      <van-cell title="我的发布" to="/myProdcust"  is-link />
-      <van-cell title="地址管理" to="/DeliveryAddress" is-link />
-      <van-cell title="账户设置" to="/userInfo" is-link />
-      <van-cell title="立即登录" to="/login" is-link />
+      <van-cell title="发布闲置" @click="authSwitch('/xzProductCreate')" is-link />
+      <van-cell title="我的发布" @click="authSwitch('/user/product')" is-link />
+      <van-cell title="地址管理" @click="authSwitch('/DeliveryAddress')" is-link />
+      <van-cell title="账户设置" @click="authSwitch('/userInfo')" is-link />
+      <!-- <van-cell title="立即登录" is-link /> -->
     </div>
   </div>
 </template>
@@ -39,13 +38,13 @@ import ynowApi from '../../api/ynow'
 export default {
   data () {
     return {
-      checkinStatus: true,
-      isLoginValid: false
+      checkinStatus: true
     }
   },
   computed: {
     ...mapState({
-      userInfo: state => state.user.userInfo
+      userInfo: state => state.user.userInfo,
+      isValidLogin: state => state.user.isValidLogin
     })
   },
   watch: {
@@ -56,6 +55,19 @@ export default {
     }
   },
   methods: {
+    authSwitch (url) {
+      if (this.isValidLogin) {
+        this.$router.push(url)
+      } else {
+        this.unwatch = this.$watch('isValidLogin', (isLogin) => {
+          if (isLogin) {
+            this.unwatch()
+            this.$router.push(url)
+          }
+        })
+        this.$store.dispatch('user/showLoginPop')
+      }
+    },
     async initPageData () {
       await this.doGetCheckInStatus()
     },

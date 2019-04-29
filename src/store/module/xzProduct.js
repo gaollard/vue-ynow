@@ -1,45 +1,51 @@
 import ynowApi from '../../api/ynow'
-import store from 'store'
+import { Toast } from 'vant'
 
 export default {
   namespaced: true,
   state: () => {
     return {
-      token: '',
-      userInfo: null,
-      loading: false,
-      showLoginPop: false,
-      isValidLogin: false
+      category: {
+        list: [],
+        loading: false
+      }
     }
   },
   mutations: {
-    setUserInfo (state, data) {
-      state.userInfo = data
-      store.set('userInfo', data)
-      if (data) {
-        state.isValidLogin = true
-      } else {
-        state.isValidLogin = false
-      }
+    setCategoryList (state, data) {
+      state.category.list = data
+    },
+    setCategoryLoading (state, data) {
+      state.category.loading = data
     }
   },
   actions: {
     /**
-     * 获取用户信息
-     * @param {*} param0
+     * 获取分类
      */
-    async getUserInfo ({ commit }) {
+    async getCategory ({ commit }) {
+      commit('setCategoryLoading', true)
       try {
-        let ret = await ynowApi.getUserInfo()
-        commit('setUserInfo', +ret.retCode === 0 ? ret.data : null)
+        let ret = await ynowApi.getXzCategorytList()
+        if (+ret.retCode === 0) {
+          commit('setCategoryList', ret.data.list)
+        } else {
+          Toast(ret.errMsg)
+        }
       } catch (error) {
-        commit('setUserInfo', null)
+        console.log(error)
       }
+      commit('setCategoryLoading', false)
     },
 
+    // 下架
+    async doDelete () {
+      // let ret = await ynowApi
+    },
+    // 点赞
     async doLike () {
     },
-
+    // 收藏
     async doCollect () {
     }
   }

@@ -40,17 +40,31 @@ export default {
   getDemandList () {
     return http.get(`${host}/demand`)
   },
+
   // 获取闲置商品
   getXzProductList () {
     return http.get(`${host}/xzProduct`)
   },
+
   // 获取闲置商品详情
   getXzProductItem (itemId) {
     return http.get(`${host}/xzProduct/${itemId}`)
   },
+
+  // 创建 xzProduct
   createXzProduct (params) {
     return http.post(`${host}/xzProduct/`, params)
   },
+
+  updateXzProduct (params) {
+    return http.post(`${host}/xzProduct/${params.itemId}`, params)
+  },
+
+  // 获取我的 xzProduct
+  getMyProduct () {
+    return http.get(`${host}/user/xzProduct`)
+  },
+
   // 获取闲置商品分类
   getXzCategorytList () {
     return http.get(`${host}/xzCategory`)

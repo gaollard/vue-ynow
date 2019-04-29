@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 import chat from './module/chat'
 import user from './module/user'
+import xzProduct from './module/xzProduct'
 
 Vue.use(Vuex)
 
@@ -13,6 +14,7 @@ export default new Vuex.Store({
   actions: {},
   modules: {
     chat,
-    user
+    user,
+    xzProduct
   }
 })

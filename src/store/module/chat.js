@@ -34,16 +34,12 @@ export default {
         },
         transports: ['websocket']
       })
-
       socket.on('res', msg => {
-        console.log('res f_from server: %s!', msg)
+        // console.log('res f_from server: %s!', msg)
       })
-
       socket.on('connect', () => {
-        const id = socket.id
-
-        log('#connect,', id, socket) // receive online user information
-
+        // const id = socket.id
+        // log('#connect,', id, socket) // receive online user information
         // listen for its own id to implement p2p communication
         // socket.on(userInfo.token, msg => {
         //   dispatch('getChatList');

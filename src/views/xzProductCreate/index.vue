@@ -17,7 +17,7 @@
       <van-field v-model="form.description" placeholder="描述(入手渠道使用感受等)" type="textarea" />
       <!-- 选择分类 -->
       <van-field
-        v-model="form.categoryName"
+        v-model="categoryName"
         placeholder="分类(有助于买家快速筛选)"
         :readonly="true"
         :is-link="true"
@@ -25,7 +25,7 @@
       />
       <!-- 选择交易方式 -->
       <van-field
-        v-model="form.tradeWayName"
+        v-model="tradeWayName"
         placeholder="交易方式"
         :readonly="true"
         :is-link="true"
@@ -66,12 +66,11 @@
       @click="handleSubmit">提交</van-button>
 
     <!-- 分类picker -->
-    <categoryPicker v-model="showCategoryPicker" @on-change="onCategoryChange" />
+    <categoryPicker v-model="showCategoryPicker" @on-confirm="onCategoryChange" @on-cancel="showCategoryPicker=false" />
     <!-- 交易方式picker -->
-    <tradeWayPicker v-model="showTradeWayPicker" @on-change="onTradeWayChange" />
+    <tradeWayPicker v-model="showTradeWayPicker" @on-confirm="onTradeWayChange" @on-cancel="showTradeWayPicker=false" />
     <!-- 选择城市picker -->
     <cityPicker v-model="showCityPicker" @on-confirm="onCityChange" />
-
     <van-dialog v-model="showFormError" title="您提交的参数不规范">
       <ul class="error-list">
         <li v-for="(item, index) in errors" :key="index">{{ index + 1 }}. {{ item }}</li>
@@ -82,6 +81,7 @@
 
 <script>
 import Vue from 'vue'
+import { mapState } from 'vuex'
 import {
   Field,
   NavBar,
@@ -98,6 +98,7 @@ import * as qiniu from 'qiniu-js'
 import cityPicker from '../../components/cityPicker'
 import categoryPicker from '../../components/categoryPicker'
 import tradeWayPicker from '../../components/tradeWayPicker'
+import { tradeWay } from '../../config'
 
 Vue.use(NavBar)
   .use(Field)
@@ -130,27 +131,63 @@ export default {
       },
       pickList: [],
       token: '',
+      // 分类 picker
       categoryValue: null,
       showCategoryPicker: false,
+      // 交易方式 picker
       tradeWayPickerValue: null,
       showTradeWayPicker: false,
+      // 所在城市 picker
       cityPickerValue: null,
       showCityPicker: false,
+      // 表单校验结果
       errors: [],
       showFormError: false
     }
   },
+  computed: {
+    ...mapState({
+      categoryList: state => state.xzProduct.category.list
+    }),
+    tradeWayName () {
+      const findIndex = tradeWay.findIndex(element => +element.id === +this.form.tradeWayId)
+      if (findIndex !== -1) {
+        return tradeWay[findIndex].name
+      } else {
+        return ''
+      }
+    },
+    categoryName () {
+      const findIndex = this.categoryList.findIndex(element => +element.id === +this.form.categoryId)
+      if (findIndex !== -1) {
+        return this.categoryList[findIndex].name
+      } else {
+        return ''
+      }
+    }
+  },
   mounted () {
     this.doGet7nToken()
+    if (this.$route.query.itemId) {
+      this.doGetXzProductItem()
+    }
+    if (!this.categoryList.length) {
+      this.$store.dispatch('xzProduct/getCategory')
+    }
   },
   methods: {
+    // 选择图片
     onRead (file) {
       this.pickList.push(file)
       this.uploadImg(this.pickList.length - 1, file.file)
     },
+
+    // 删除图片
     removeItem (index) {
       this.pickList.splice(index, 1)
     },
+
+    // 获取七牛云token
     async doGet7nToken () {
       try {
         let ret = await ynowApi.get7nToken()
@@ -163,6 +200,36 @@ export default {
         console.log(error)
       }
     },
+
+    // 获取商品信息
+    async doGetXzProductItem () {
+      try {
+        let ret = await ynowApi.getXzProductItem(this.$route.query.itemId)
+        if (+ret.retCode === 0) {
+          this.itemInfo = ret.data
+          this.form.price = +this.itemInfo.price / 100
+          this.form.title = this.itemInfo.title
+          this.form.city = this.itemInfo.city
+          this.form.description = this.itemInfo.description
+          this.form.depreciation = this.itemInfo.depreciation
+          this.form.categoryId = this.itemInfo.category_id
+          this.form.tradeWayId = this.itemInfo.trade_way_id
+          this.pickList = this.itemInfo.imgs.map(element => {
+            return {
+              url: element,
+              content: element,
+              percent: 100
+            }
+          })
+        } else {
+          Toast(ret.errMsg)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    // 上传图片
     uploadImg (index, file, callback) {
       const vm = this
       const observable = qiniu.upload(file, file.name, this.token, {}, {})
@@ -172,7 +239,6 @@ export default {
           vm.pickList = [].concat(vm.pickList)
         },
         error (error) {
-          console.log(error)
           Toast(error)
         },
         complete (res) {
@@ -181,13 +247,16 @@ export default {
         }
       })
     },
+
+    // 创建
     async doCreateProduct () {
       try {
         let imgs = this.pickList.map(element => element.url)
         imgs = JSON.stringify(imgs)
         const params = {
           ...this.form,
-          imgs: imgs
+          imgs: imgs,
+          price: +this.form.price * 100
         }
         let ret = await ynowApi.createXzProduct(params)
         if (+ret.errCode === 0) {
@@ -199,6 +268,30 @@ export default {
         console.log(error)
       }
     },
+
+    // 修改
+    async doUpdateProduct () {
+      try {
+        let imgs = this.pickList.map(element => element.url)
+        imgs = JSON.stringify(imgs)
+        const params = {
+          ...this.form,
+          imgs: imgs,
+          itemId: this.$route.query.itemId,
+          price: +this.form.price * 100
+        }
+        let ret = await ynowApi.updateXzProduct(params)
+        if (+ret.errCode === 0) {
+          Toast.success('发布成功')
+        } else {
+          Toast(ret.errMsg)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    // 参数校验
     handleSubmit () {
       const form = this.form
       const errors = this.errors
@@ -223,22 +316,33 @@ export default {
       if (this.pickList.length < 2) {
         errors.push('宝贝图片不能小于2张')
       }
-
       this.showFormError = !!errors.length
       if (!this.showFormError) {
-        this.doCreateProduct()
+        if (this.$route.query.itemId) {
+          this.doUpdateProduct()
+        } else {
+          this.doCreateProduct()
+        }
       }
     },
+
+    // 选择分类
     onCategoryChange (data) {
       this.categoryValue = data
       this.form.categoryId = data.id
       this.form.categoryName = data.name
+      this.showCategoryPicker = false
     },
+
+    // 选择交易方式
     onTradeWayChange (data) {
       this.tradeWayPickerValue = data
       this.form.tradeWayId = data.id
       this.form.tradeWayName = data.name
+      this.showTradeWayPicker = false
     },
+
+    // 选择所在城市
     onCityChange (data) {
       this.cityPickerValue = data
       let values = []
@@ -252,6 +356,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.view {
+  padding-bottom: 50px;
+  .btm-fixed {
+    z-index: 100;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+  }
+}
+
 .ui-flex {
   display: flex;
   align-items: center;
