@@ -141,22 +141,38 @@ export default {
       content
     })
   },
-  // 获取用户介绍信息
+
+  // 获取用户介绍信息 ------------------------------------------------------- 用户模块
   getUserProfile ({ uid }) {
     return http.get(`${host}/user/profile?uid=${uid}`)
   },
+
   // 获取我的关注
   getFollowList () {
     return http.get(`${host}/user/follow`)
   },
+
   // 添加关注
   addFollow ({ followId }) {
     return http.post(`${host}/user/follow`, {
       followId
     })
   },
+
   // 取消关注
   removeFollow ({ followId }) {
     return http.delete(`${host}/user/follow/${followId}`)
+  },
+
+  // 发布需求 ---------------------------------------------------------------- 需求模块
+  createDemand (params) {
+    return http.post(`${host}/demand`, {
+      ...params
+    })
+  },
+
+  // 需求详情
+  getDemandItem ({ itemId }) {
+    return http.get(`${host}/demand/${itemId}`)
   }
 }

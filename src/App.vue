@@ -8,7 +8,7 @@
     >
       <van-tabbar-item icon="home-o" to="/">闲鸭</van-tabbar-item>
       <van-tabbar-item icon="apps-o" to="/category">分类</van-tabbar-item>
-      <van-tabbar-item icon="fire-o" to="/auction">竞拍</van-tabbar-item>
+      <van-tabbar-item icon="fire-o" to="/demand">跑腿</van-tabbar-item>
       <van-tabbar-item info="5" icon="chat-o" to="/chat">消息</van-tabbar-item>
       <van-tabbar-item icon="manager-o" to="/account">我的</van-tabbar-item>
     </van-tabbar>
