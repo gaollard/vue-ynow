@@ -141,20 +141,20 @@ export default {
     isValidLogin: {
       handler (val) {
         if (val) {
-          this.doGetXzProductCollectState(1)
-          this.doGetXzProductCollectState(2)
+          this.doGetCollectState(1)
+          this.doGetCollectState(2)
         }
       },
       immediate: true
     }
   },
   mounted () {
-    this.doGetXzProductItem()
-    this.doGetProductComment()
+    this.getDetails()
+    this.doGetComment()
   },
   methods: {
     // 获取商品信息
-    async doGetXzProductItem () {
+    async getDetails () {
       try {
         let ret = await ynowApi.getXzProductItem(this.$route.params.itemId)
         if (+ret.retCode === 0) {
@@ -167,9 +167,12 @@ export default {
       }
     },
     // 获取商品评论
-    async doGetProductComment () {
+    async doGetComment () {
       try {
-        let ret = await ynowApi.getProductComment(this.$route.params.itemId)
+        let ret = await ynowApi.getComment({
+          typeId: 1,
+          itemId: this.$route.params.itemId
+        })
         if (+ret.errCode === 0) {
           this.commentList = ret.data.list
         } else {
@@ -215,11 +218,12 @@ export default {
     },
 
     // 获取状态
-    async doGetXzProductCollectState (typeId) {
+    async doGetCollectState (typeId) {
       try {
-        let ret = await ynowApi.getXzProductCollectState({
-          itemId: this.$route.params.itemId,
-          typeId
+        let ret = await ynowApi.getCollectState({
+          typeId,
+          objectId: 1,
+          itemId: this.$route.params.itemId
         })
         if (+ret.retCode === 0) {
           if (typeId === 1) {
@@ -243,12 +247,13 @@ export default {
       if (typeId === 1 && this.isCollected) return
       if (typeId === 2 && this.isLiked) return
       try {
-        let ret = await ynowApi.createXzProductCollect({
-          itemId: this.$route.params.itemId,
-          typeId
+        let ret = await ynowApi.addCollect({
+          typeId,
+          objectId: 1,
+          itemId: this.$route.params.itemId
         })
         if (+ret.errCode === 0) {
-          this.doGetXzProductCollectState(typeId)
+          this.doGetCollectState(typeId)
         } else {
           Toast(ret.errMsg)
         }
@@ -266,13 +271,11 @@ export default {
         data = this.likeData
       }
       try {
-        let res = await ynowApi.deleteXzProductCollect({
-          itemId: this.$route.params.itemId,
-          typeId,
+        let res = await ynowApi.removeCollect({
           recordId: data.id
         })
         if (+res.retCode === 0) {
-          this.doGetXzProductCollectState(typeId)
+          this.doGetCollectState(typeId)
         } else {
           Toast(res.errMsg)
         }
@@ -290,9 +293,9 @@ export default {
         talkTo: this.talkComment ? this.talkComment.id : ''
       }
       try {
-        let ret = await ynowApi.addProductComment(params)
+        let ret = await ynowApi.addComment(params)
         if (+ret.retCode === 0) {
-          this.doGetProductComment()
+          this.doGetComment()
           this.content = ''
         } else {
           Toast(ret.errMsg)

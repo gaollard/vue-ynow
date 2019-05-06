@@ -72,32 +72,29 @@ export default {
   getXzCategorytList () {
     return http.get(`${host}/xzCategory`)
   },
-  /**
-   *
-   * @param param0 typeId = 1 收藏, typeId = 2 喜欢
-   */
-  getXzProductCollect ({ typeId = 1 }) {
-    return http.get(`${host}/xzProductCollect?typeId=${typeId}`)
+
+  // 数据采集模块 ------------------------------------------------------------------------------------------
+  getXzProductCollect ({ typeId = 1, objectId }) {
+    return http.get(`${host}/xzProductCollect?typeId=${typeId}&objectId=${objectId}`)
   },
-  // 添加 收藏/喜欢
-  createXzProductCollect ({ itemId, typeId = 1 }) {
-    return http.post(`${host}/xzProductCollect?typeId=${typeId}`, {
+  // 添加收藏
+  addCollect ({ itemId, objectId, typeId = 1 }) {
+    return http.post(`${host}/collect?typeId=${typeId}&objectId=${objectId}`, {
       itemId
     })
   },
-  // 删除 收藏/喜欢
-  deleteXzProductCollect ({ recordId, itemId, typeId = 1 }) {
-    return http.delete(
-      `${host}/xzProductCollect/${recordId}?typeId=${typeId}&itemId=${itemId}`
-    )
+  // 删除收藏
+  removeCollect({ recordId }) {
+    return http.delete(`${host}/collect/${recordId}`)
   },
-  // 收藏/喜欢 状态查询
-  getXzProductCollectState ({ itemId, typeId = 1 }) {
+  // 收藏状态查询
+  getCollectState ({ itemId, typeId = 1, objectId }) {
     return http.get(
-      `${host}/user/xzProductCollectState/${itemId}?typeId=${typeId}`
+      `${host}/collect/${itemId}?typeId=${typeId}&objectId=${objectId}`
     )
   },
-  // 获取聊天列表
+
+  // 获取模块 ------------------------------------------------------------------------------------------
   getChatList () {
     return http.get(`${host}/chat`)
   },
@@ -130,8 +127,10 @@ export default {
   checkLogin () {
     return http.get(`${host}/user/checkLogin`)
   },
-  getProductComment (itemId) {
-    return http.get(`${host}/xzProductComment?itemId=${itemId}`)
+
+  // 评论 -----------------------------------------------------------------
+  getProductComment ({ itemId, typeId }) {
+    return http.get(`${host}/xzProductComment?itemId=${itemId}&typeId=${typeId}`)
   },
   // 增加评论
   addProductComment ({ itemId, content, talkTo, typeId }) {
@@ -141,8 +140,17 @@ export default {
       content
     })
   },
-
-  // 获取用户介绍信息 ------------------------------------------------------- 用户模块
+  getComment ({ itemId, typeId }) {
+    return http.get(`${host}/comment?itemId=${itemId}&typeId=${typeId}`)
+  },
+  addComment ({ itemId, content, talkTo, typeId }) {
+    return http.post(`${host}/comment?itemId=${itemId}`, {
+      talkTo,
+      typeId,
+      content
+    })
+  },
+  // 获取用户介绍信息 --------------------------------------------------------
   getUserProfile ({ uid }) {
     return http.get(`${host}/user/profile?uid=${uid}`)
   },
