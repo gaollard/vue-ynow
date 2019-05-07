@@ -8,7 +8,7 @@ export default {
   state: () => {
     return {
       token: '',
-      userInfo: null,
+      userInfo: store.get('userInfo'),
       loading: false,
       showLoginPop: false,
       isValidLogin: false

@@ -21,6 +21,7 @@
 
       <!-- 选择分类 -->
       <van-field
+        v-show="false"
         v-model="categoryName"
         placeholder="分类(有助于快速筛选)"
         :readonly="true"
@@ -117,11 +118,11 @@ export default {
     return {
       checked: '',
       form: {
-        reward: '10000',
-        title: '求开发一款跑腿APP',
-        city: '北京 北京市 东城区',
-        description: '完成UU跑腿的80*功能即可，可以在线接单收款等功能。',
-        requires: '具有Java开发经验',
+        reward: '',
+        title: '',
+        city: '',
+        description: '',
+        requires: '',
         categoryId: '',
         categoryName: '',
         tradeWayId: '',
@@ -306,9 +307,9 @@ export default {
       // if (form.requires.length === 0) {
       //   errors.push('宝贝成色不能为空')
       // }
-      if (form.categoryId.length === 0) {
-        errors.push('宝贝分类不能为空')
-      }
+      // if (form.categoryId.length === 0) {
+      //   errors.push('宝贝分类不能为空')
+      // }
       // if (form.tradeWayId.length === 0) {
       //   errors.push('交易方式不能为空')
       // }
