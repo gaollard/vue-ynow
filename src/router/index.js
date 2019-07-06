@@ -15,7 +15,7 @@ const router = new Router({
     {
       path: '/',
       name: 'welcome',
-      component: () => import('../views/xzProduct'),
+      component: () => import('../views/welcome'),
       meta: {
         tabbar: true
       }
