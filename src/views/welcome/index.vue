@@ -33,25 +33,40 @@
       </SwipeItem>
     </Swipe>
 
-    <div class="goods-topic">
+    <!-- <div class="goods-topic">
       <div class="goods-topic__hd">
         <span>手机数码</span>
       </div>
       <div class="goods-topic__bd"></div>
-    </div>
+    </div>-->
 
     <div class="goods-topic">
       <div class="goods-topic__hd">
         <span>技能培训</span>
       </div>
-      <div class="goods-topic__bd"></div>
+      <div class="goods-topic__bd">
+        <ul class="g-list">
+          <li class="g-item" v-for="(item, index) in list" :key="index" v-if="index % 2 ==0">
+            <div class="g-pic">
+              <img :src="item.imgs[0]" alt />
+            </div>
+          </li>
+        </ul>
+        <ul class="g-list g-list-right">
+          <li class="g-item" v-for="(item, index) in list" :key="index" v-if="index % 2!=0">
+            <div class="g-pic">
+              <img :src="item.imgs[0]" alt />
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { Icon, Swipe, SwipeItem } from 'vant'
-
+import ynowApi from '../../api/ynow'
 export default {
   components: {
     [Icon.name]: Icon,
@@ -60,6 +75,7 @@ export default {
   },
   data () {
     return {
+      list: [],
       categoryList: [
         {
           name: '推荐'
@@ -87,6 +103,11 @@ export default {
         }
       ]
     }
+  },
+  mounted () {
+    ynowApi.getXzProductList().then(res => {
+      this.list = res.data.list
+    })
   }
 }
 </script>
@@ -178,6 +199,26 @@ export default {
   &__hd {
     height: 46px;
     line-height: 46px;
+  }
+}
+
+.g-list {
+  float: left;
+  width: 167px;
+  overflow: hidden;
+}
+
+.g-list-right {
+  margin-left: 10px;
+}
+
+.g-item {
+  .g-pic {
+    width: 100%;
+  }
+  img {
+    display: block;
+    width: 100%;
   }
 }
 </style>
