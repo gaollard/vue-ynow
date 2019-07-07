@@ -9,11 +9,7 @@
         </div>
       </div>
       <div class="category-list-wrapper">
-        <ul class="category-list">
-          <li v-for="(item, index) in categoryList" :key="index">
-            <span>{{ item.name }}</span>
-          </li>
-        </ul>
+        <CategoryList></CategoryList>
       </div>
     </div>
 
@@ -33,45 +29,24 @@
       </SwipeItem>
     </Swipe>
 
-    <!-- <div class="goods-topic">
-      <div class="goods-topic__hd">
-        <span>手机数码</span>
-      </div>
-      <div class="goods-topic__bd"></div>
-    </div>-->
-
-    <div class="goods-topic">
-      <div class="goods-topic__hd">
-        <span>技能培训</span>
-      </div>
-      <div class="goods-topic__bd">
-        <ul class="g-list">
-          <li class="g-item" v-for="(item, index) in list" :key="index" v-if="index % 2 ==0">
-            <div class="g-pic">
-              <img :src="item.imgs[0]" alt />
-            </div>
-          </li>
-        </ul>
-        <ul class="g-list g-list-right">
-          <li class="g-item" v-for="(item, index) in list" :key="index" v-if="index % 2!=0">
-            <div class="g-pic">
-              <img :src="item.imgs[0]" alt />
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
+    <!-- 闲置列表 -->
+    <XzProduct></XzProduct>
   </div>
 </template>
 
 <script>
 import { Icon, Swipe, SwipeItem } from 'vant'
 import ynowApi from '../../api/ynow'
+import XzProduct from './product-list'
+import CategoryList from './category-list'
+
 export default {
   components: {
     [Icon.name]: Icon,
     Swipe,
-    SwipeItem
+    SwipeItem,
+    XzProduct,
+    CategoryList
   },
   data () {
     return {
@@ -203,8 +178,6 @@ export default {
 }
 
 .g-list {
-  float: left;
-  width: 167px;
   overflow: hidden;
 }
 
@@ -213,8 +186,13 @@ export default {
 }
 
 .g-item {
+  float: left;
+  width: 167px;
   .g-pic {
     width: 100%;
+    height: 120px;
+    background-size: 100%;
+    background-position: center;
   }
   img {
     display: block;

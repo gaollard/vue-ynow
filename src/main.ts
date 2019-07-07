@@ -17,7 +17,8 @@ import {
   TabbarItem,
   Field,
   Switch,
-  Icon
+  Icon,
+  Lazyload
 } from 'vant'
 
 Vue.use(Cell)
@@ -28,6 +29,7 @@ Vue.use(Cell)
   .use(Field)
   .use(Switch)
   .use(Icon)
+  .use(Lazyload)
 
 Vue.config.productionTip = false
 
