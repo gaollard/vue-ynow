@@ -1,7 +1,7 @@
 <template>
-  <div class="view">
+  <div class="view" v-if="partnerInfo">
     <van-nav-bar
-      :title="partnerInfo.nickname"
+      :title="partnerInfo.nickname || partnerInfo.mobile"
       left-text="返回"
       @click-left="$router.go(-1)"
       left-arrow
@@ -27,9 +27,7 @@
           v-model="content"
           placeholder="请输入用户名"
         />
-        <van-button class="form-submit" type="primary" @click="doSendMsg"
-          >发送</van-button
-        >
+        <van-button class="form-submit" type="primary" @click="doSendMsg">发送</van-button>
       </div>
     </div>
   </div>
@@ -37,10 +35,9 @@
 
 <script>
 import Vue from 'vue'
-import { Field, Button, NavBar } from 'vant'
-import store from 'store'
+import { Field, Button, NavBar, Toast } from 'vant'
 import { mapState } from 'vuex'
-const userInfo = store.get('userInfo')
+import ynowApi from '../../api/ynow'
 
 Vue.use(Field)
   .use(Button)
@@ -49,17 +46,17 @@ Vue.use(Field)
 export default {
   data () {
     return {
-      userInfo,
       msgList: [],
+      partnerInfo: null,
       content: 'mock message'
     }
   },
   computed: {
     ...mapState({
+      userInfo: state => state.user.userInfo,
       list (state) {
-        const key = `${userInfo.id}_${this.$route.params.partnerId}`
+        const key = `${this.userInfo.id}_${this.$route.params.partnerId}`
         const list = [].concat(state.chat.msgObj[key] || [])
-
         function chatCompare (chatA, chatB) {
           if (chatB.create_time < chatA.create_time) {
             return 1
@@ -71,15 +68,30 @@ export default {
         }
         list.sort(chatCompare)
         return list
-      },
-      partnerInfo (state) {
-        return state.chat.userList.find(element => {
-          return +element.id === +this.$route.params.partnerId
-        })
       }
     })
   },
+  mounted () {
+    this.doGetUserProfile()
+  },
   methods: {
+    /**
+     * 获取用户介绍信息
+     */
+    async doGetUserProfile () {
+      try {
+        let ret = await ynowApi.getUserProfile({
+          uid: this.$route.params.partnerId
+        })
+        if (+ret.retCode === 0) {
+          this.partnerInfo = ret.data
+        } else {
+          Toast(ret.errMsg)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
     getAvatar (msg) {
       return this.isFromMe(msg) ? this.userInfo.avatar : this.partnerInfo.avatar
     },

@@ -13,6 +13,10 @@ export default {
   getUserInfo () {
     return http.get(`${host}/user/userInfo`)
   },
+  // 获取用户介绍信息 ---------------------------------------------------------------------
+  getUserProfile ({ uid }) {
+    return http.get(`${host}/user/profile?uid=${uid}`)
+  },
   updateUserInfo (params) {
     return http.post(`${host}/user/userInfo`, params)
   },
@@ -45,7 +49,6 @@ export default {
   getXzProductList () {
     const argv = arguments[0]
     const categoryId = argv ? (argv.categoryId || '') : ''
-    console.log(11, categoryId)
     return http.get(`${host}/xzProduct?categoryId=${categoryId}`)
   },
 
@@ -72,32 +75,30 @@ export default {
   getXzCategorytList () {
     return http.get(`${host}/xzCategory`)
   },
-  /**
-   *
-   * @param param0 typeId = 1 收藏, typeId = 2 喜欢
-   */
-  getXzProductCollect ({ typeId = 1 }) {
-    return http.get(`${host}/xzProductCollect?typeId=${typeId}`)
+
+  // 数据采集模块 ------------------------------------------------------------------------------------------
+  // 获取我的收藏
+  getCollect ({ typeId = 1, objectId }) {
+    return http.get(`${host}/collect?typeId=${typeId}&objectId=${objectId}`)
   },
-  // 添加 收藏/喜欢
-  createXzProductCollect ({ itemId, typeId = 1 }) {
-    return http.post(`${host}/xzProductCollect?typeId=${typeId}`, {
+  // 添加收藏
+  addCollect ({ itemId, objectId, typeId = 1 }) {
+    return http.post(`${host}/collect?typeId=${typeId}&objectId=${objectId}`, {
       itemId
     })
   },
-  // 删除 收藏/喜欢
-  deleteXzProductCollect ({ recordId, itemId, typeId = 1 }) {
-    return http.delete(
-      `${host}/xzProductCollect/${recordId}?typeId=${typeId}&itemId=${itemId}`
-    )
+  // 删除收藏
+  removeCollect ({ recordId }) {
+    return http.delete(`${host}/collect/${recordId}`)
   },
-  // 收藏/喜欢 状态查询
-  getXzProductCollectState ({ itemId, typeId = 1 }) {
+  // 收藏状态查询
+  getCollectState ({ itemId, typeId = 1, objectId }) {
     return http.get(
-      `${host}/user/xzProductCollectState/${itemId}?typeId=${typeId}`
+      `${host}/collect/${itemId}?typeId=${typeId}&objectId=${objectId}`
     )
   },
-  // 获取聊天列表
+
+  // 聊天模块 -----------------------------------------------------------------------------------------------
   getChatList () {
     return http.get(`${host}/chat`)
   },
@@ -130,21 +131,22 @@ export default {
   checkLogin () {
     return http.get(`${host}/user/checkLogin`)
   },
-  getProductComment (itemId) {
-    return http.get(`${host}/xzProductComment?itemId=${itemId}`)
+
+  // 评论 ---------------------------------------------------------------------------------
+  // 获取评论
+  getComment ({ itemId, typeId }) {
+    return http.get(`${host}/comment?itemId=${itemId}&typeId=${typeId}`)
   },
   // 增加评论
-  addProductComment ({ itemId, content, talkTo, typeId }) {
-    return http.post(`${host}/xzProductComment?itemId=${itemId}`, {
+  addComment ({ itemId, content, talkTo, typeId }) {
+    return http.post(`${host}/comment?itemId=${itemId}`, {
       talkTo,
       typeId,
       content
     })
   },
-  // 获取用户介绍信息
-  getUserProfile ({ uid }) {
-    return http.get(`${host}/user/profile?uid=${uid}`)
-  },
+
+  // 用户关注模块 -------------------------------------------------------------------------
   // 获取我的关注
   getFollowList () {
     return http.get(`${host}/user/follow`)
@@ -158,5 +160,17 @@ export default {
   // 取消关注
   removeFollow ({ followId }) {
     return http.delete(`${host}/user/follow/${followId}`)
+  },
+
+  // 需求模块 -----------------------------------------------------------------------------
+  // 创建需求
+  createDemand (params) {
+    return http.post(`${host}/demand`, {
+      ...params
+    })
+  },
+  // 需求详情
+  getDemandItem ({ itemId }) {
+    return http.get(`${host}/demand/${itemId}`)
   }
 }

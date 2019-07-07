@@ -3,7 +3,6 @@ import Router from 'vue-router'
 
 import Account from '../views/account'
 import DeliveryAddress from '../views/deliveryAddress'
-import Demand from '../views/demand'
 const Login = () => import('../views/login/index.vue')
 const Point = () => import('../views/point/index.vue')
 
@@ -37,11 +36,6 @@ const router = new Router({
       path: '/DeliveryAddress',
       name: 'DeliveryAddress',
       component: DeliveryAddress
-    },
-    {
-      path: '/Demand',
-      name: 'Demand',
-      component: Demand
     },
     {
       path: '/Login',
@@ -152,6 +146,22 @@ const router = new Router({
       path: '/user/product',
       name: 'userProduct',
       component: () => import('../views/userProduct')
+    },
+    // 需求模块
+    {
+      path: '/demand/create',
+      name: 'demandCreate',
+      component: () => import('../views/demandCreate')
+    },
+    {
+      path: '/demand/:itemId',
+      name: 'demandItem',
+      component: () => import('../views/demandItem')
+    },
+    {
+      path: '/demand',
+      name: 'demand',
+      component: () => import('../views/demand')
     },
     {
       // 我的收藏

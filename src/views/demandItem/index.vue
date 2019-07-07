@@ -1,62 +1,91 @@
 <template>
   <div class="view" v-if="itemInfo" :class="{'has-talk': showTalk }">
-    <Swipe class="swiper" @change="onSwipeIndexChange">
-      <SwipeItem class="swiper-slide" v-for="(item, index) in itemInfo.imgs" :key="index">
-        <div class="p-slide-img" :style="{ backgroundImage: 'url(' + item + ')' }"></div>
-      </SwipeItem>
-      <div class="custom-indicator" slot="indicator">
-        <span>{{ current + 1 }}/ {{ itemInfo.imgs.length }}</span>
+    <div class="demand-item floor">
+      <div class="demand-item__hd">
+        <img class="demand-item__logo" src="https://zb.oschina.net/file/get?path=static/project-reward/cover/youxikaifa_2.png">
+        <ul>
+          <li class="title">{{ itemInfo.title }}</li>
+          <li class="tags">
+            <span class="tag">程序开发</span>
+          </li>
+        </ul>
       </div>
-    </Swipe>
-    <div class="group group-price">
-      <div class="price">
-        <span>¥{{ itemInfo.price / 100 }}元</span>
-        <span class="depreciation">{{ itemInfo.depreciation }}</span>
-      </div>
-      <div class="name">{{ itemInfo.title }} {{ itemInfo.description }}</div>
-      <div class="line"></div>
-      <div class="userInfo" @click="toUserProfile(itemInfo.user)">
-        <div class="avatar-wrap">
-          <img :src="itemInfo.user.avatar" />
+      <div class="demand-item__bd">
+        <div class="column">
+          <span class="label">需求预算：</span>
+          <span>￥{{ itemInfo.reward / 100 }}</span>
         </div>
-        <div>
-          <div class="username">{{ itemInfo.user.nickname }}</div>
-          <div class="remark">
-            <span>{{ itemInfo.user.college }}</span>
-            <span>{{ itemInfo.user.residence }}</span>
-          </div>
+        <div class="column">
+          <span class="label">技能要求：</span>
+          <span>{{ itemInfo.requires || '无任何要求' }}</span>
+        </div>
+        <div class="column">
+          <span class="label">交付日期：</span>
+          <span>{{ itemInfo.deadline || itemInfo.create_time }}</span>
+        </div>
+        <div class="column">
+          <span class="label">发布日期：</span>
+          <span>{{ itemInfo.create_time }}</span>
+        </div>
+      </div>
+      <div class="demand-item__ft">
+        <div class="ui-flex">
+          <img class="demand-item__avatar" :src="itemInfo.userInfo.avatar"/>
+          <div class="demand-item__name">{{ itemInfo.userInfo.mobile }}</div>
+        </div>
+        <div class="ui-flex">
+          <van-icon class="arrow-right" name="friends" />
+          <span>10人</span>
         </div>
       </div>
     </div>
-    <div class="group group-comment">
-      <div class="title">留言</div>
-      <div class="line"></div>
-      <div class="list">
-        <div class="comment-item" v-for="(comment, index) in commentList" :key="index">
-          <div class="border">
-            <div class="comment-item__header">
-              <img class="comment-item__avatar" :src="comment.userInfo.avatar" alt="">
-              <div>
-                <span class="nickname">{{ comment.userInfo.nickname }}</span>
-                <div class="comment-item__date">2019-04-06</div>
-              </div>
-              <authButton class="comment-item__reply" @onLogin="handleClickComment(comment)">回复</authButton>
-            </div>
-            <div class="comment-item__content">{{ comment.content }}</div>
-            <div class="child-list">
-              <div class="child-item" v-for="(cComment, cIndex) in comment.children" :key="cIndex">
-                <div class="comment-item__header">
-                  <img class="comment-item__avatar" :src="cComment.userInfo.avatar" alt="">
-                  <div>
-                    <span class="nickname">{{ cComment.userInfo.nickname }}</span>
-                    <div class="comment-item__date">2019-04-06</div>
-                  </div>
+
+    <!-- 需求描述 -->
+    <div class="floor floor-desc">
+      <div class="floor__header">需求描述</div>
+      <div class="floor__body">{{ itemInfo.description }}</div>
+    </div>
+
+    <!-- 报名列表 -->
+    <div class="floor floor-candidate">
+      <div class="floor__header">报名列表</div>
+      <div class="floor__body">
+        <div class="zero-tip">暂时无人报名</div>
+      </div>
+    </div>
+
+    <!-- 留言列表 -->
+    <div class="floor group group-comment">
+      <div class="floor__header">留言列表</div>
+      <div class="floor__body">
+        <div class="zero-tip" v-if="!commentList.length">暂时无人留言</div>
+        <div class="list" v-else>
+          <div class="comment-item" v-for="(comment, index) in commentList" :key="index">
+            <div class="border">
+              <div class="comment-item__header">
+                <img class="comment-item__avatar" :src="comment.userInfo.avatar" alt="">
+                <div>
+                  <span class="nickname">{{ comment.userInfo.nickname }}</span>
+                  <div class="comment-item__date">2019-04-06</div>
                 </div>
-                <div class="comment-item__content">
-                  <span class="sign-replay">回复</span>
-                  <span class="sign-quote">@</span>
-                  <span class="sign-name">{{ comment.userInfo.nickname }}</span>
-                  <span class="sign-text">:{{ cComment.content }}</span>
+                <authButton class="comment-item__reply" @onLogin="handleClickComment(comment)">回复</authButton>
+              </div>
+              <div class="comment-item__content">{{ comment.content }}</div>
+              <div class="child-list">
+                <div class="child-item" v-for="(cComment, cIndex) in comment.children" :key="cIndex">
+                  <div class="comment-item__header">
+                    <img class="comment-item__avatar" :src="cComment.userInfo.avatar" alt="">
+                    <div>
+                      <span class="nickname">{{ cComment.userInfo.nickname }}</span>
+                      <div class="comment-item__date">2019-04-06</div>
+                    </div>
+                  </div>
+                  <div class="comment-item__content">
+                    <span class="sign-replay">回复</span>
+                    <span class="sign-quote">@</span>
+                    <span class="sign-name">{{ comment.userInfo.nickname }}</span>
+                    <span class="sign-text">:{{ cComment.content }}</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -65,27 +94,29 @@
       </div>
     </div>
 
+    <!-- 评论弹窗 -->
     <div class="talk-box-wrapper" v-show="showTalk">
       <Field class="talk-box" type="textarea" :placeholder="placeholder" v-model="content"></Field>
       <Button class="talk-btn" :disabled="!content.length" @click="handleComment">提交评论</Button>
       <Button class="back-btn" @click="showTalk=false">取消评论</Button>
     </div>
 
+    <!-- 底部按钮组 -->
     <div class="group group-btm">
-      <authButton :class="{ 'is-active': isLiked }" @onLogin="toggle(2)">
-        <van-icon class="icon" :name="isLiked ? 'like' : 'like-o'" />
-        <span>喜欢</span>
-      </authButton>
       <authButton :class="{ 'is-active': isCollected }" @onLogin="toggle(1)" >
         <van-icon class="icon" :name="isCollected ? 'star' : 'star-o'" />
         <span>收藏</span>
+      </authButton>
+      <authButton :class="{ 'is-active': isLiked }" @onLogin="toggle(2)">
+        <van-icon class="icon" :name="isLiked ? 'like' : 'like-o'" />
+        <span>点赞</span>
       </authButton>
       <authButton @onLogin="hanldeLeaveMsg">
         <van-icon class="icon" name="chat-o" />
         <span>留言</span>
       </authButton>
-      <authButton class="btn-want" @onLogin="$router.push('/chatItem/' + itemInfo.user.id)">
-        <span>我想要</span>
+      <authButton class="btn-want" @onLogin="$router.push('/chatItem/' + itemInfo.userInfo.id)">
+        <span>在线聊天</span>
       </authButton>
     </div>
   </div>
@@ -150,13 +181,15 @@ export default {
   },
   mounted () {
     this.getDetails()
-    this.doGetComment()
+    this.getComment()
   },
   methods: {
-    // 获取商品信息
+    // 获取详情
     async getDetails () {
       try {
-        let ret = await ynowApi.getXzProductItem(this.$route.params.itemId)
+        let ret = await ynowApi.getDemandItem({
+          itemId: this.$route.params.itemId
+        })
         if (+ret.retCode === 0) {
           this.itemInfo = ret.data
         } else {
@@ -166,12 +199,13 @@ export default {
         console.log(error)
       }
     },
-    // 获取商品评论
-    async doGetComment () {
+
+    // 获取评论
+    async getComment () {
       try {
         let ret = await ynowApi.getComment({
-          typeId: 1,
-          itemId: this.$route.params.itemId
+          itemId: this.$route.params.itemId,
+          typeId: 3
         })
         if (+ret.errCode === 0) {
           this.commentList = ret.data.list
@@ -181,22 +215,6 @@ export default {
       } catch (error) {
         console.log(error)
       }
-    },
-
-    // 留言
-    hanldeLeaveMsg () {
-      this.showTalk = true
-      this.talkComment = null
-    },
-
-    // 调转到用户简介界面
-    toUserProfile (item) {
-      this.$router.push(`/user/profile/${item.id}`)
-    },
-
-    // 商品图片轮播
-    onSwipeIndexChange (index) {
-      this.current = index
     },
 
     // 收藏状态切换
@@ -222,7 +240,7 @@ export default {
       try {
         let ret = await ynowApi.getCollectState({
           typeId,
-          objectId: 1,
+          objectId: 2,
           itemId: this.$route.params.itemId
         })
         if (+ret.retCode === 0) {
@@ -249,7 +267,7 @@ export default {
       try {
         let ret = await ynowApi.addCollect({
           typeId,
-          objectId: 1,
+          objectId: 2,
           itemId: this.$route.params.itemId
         })
         if (+ret.errCode === 0) {
@@ -289,13 +307,13 @@ export default {
       const params = {
         itemId: this.$route.params.itemId,
         content: this.content,
-        typeId: this.talkComment ? 2 : 1,
+        typeId: this.talkComment ? 2 : 3,
         talkTo: this.talkComment ? this.talkComment.id : ''
       }
       try {
         let ret = await ynowApi.addComment(params)
         if (+ret.retCode === 0) {
-          this.doGetComment()
+          this.getComment()
           this.content = ''
         } else {
           Toast(ret.errMsg)
@@ -309,6 +327,17 @@ export default {
     async handleClickComment (comment) {
       this.talkComment = comment
       this.showTalk = true
+    },
+
+    // 留言
+    hanldeLeaveMsg () {
+      this.showTalk = true
+      this.talkComment = null
+    },
+
+    // 调转到用户简介界面
+    toUserProfile (item) {
+      this.$router.push(`/user/profile/${item.id}`)
     }
   }
 }
@@ -319,7 +348,87 @@ export default {
   overflow: hidden;
   min-height: 100vh;
   padding-bottom: 50px;
-  background-color: #f5f5f5;
+}
+
+.floor {
+  margin-bottom: 8px;
+  background: #fff;
+  border-top: 1px solid #e7eff5;
+  border-bottom: 1px solid #e7eff5;
+  &__header {
+    width: 100%;
+    height: 43px;
+    line-height: 43px;
+    border-bottom: 1px solid #e7eff5;
+    color: #142457;
+    padding-left: 10px;
+  }
+  &__body {
+    min-height: 50px;
+    padding: 10px;
+    color: #48576A;
+  }
+  .zero-tip {
+    margin-top: 15px;
+    color: #999;
+    text-align: center;
+  }
+}
+
+// 顶部相关属性
+.demand-item {
+  overflow: hidden;
+  padding: 12px 12px;
+  border-top: 0;
+  border-bottom: solid 1px #f5f5f5;
+  .tags {
+    margin-top: 4px;
+  }
+  .tag {
+    display: inline-block;
+    padding: 2px 6px;
+    font-size: 12px;
+    color: #409eff;
+    margin-right: 5px;
+    background: rgba(64, 158, 255, .1);
+  }
+  &__logo {
+    width: 55px;
+    height: 55px;
+    margin-right: 10px;
+    background: #2a98ff;
+  }
+  &__avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+  }
+  &__hd {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: bold;
+  }
+  &__bd {
+    font-size: 13px;
+    line-height: 24px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: #48576A;
+  }
+  &__ft {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #48576A;
+    padding-top: 10px;
+    border-top: 1px solid #E7EFF5;
+  }
+  &__name {
+    margin-left: 4px;
+  }
 }
 
 .has-talk {

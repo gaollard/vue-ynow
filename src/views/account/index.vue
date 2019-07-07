@@ -16,13 +16,14 @@
     </div>
     <div class="card-menu">
       <div @click="authSwitch('/follow')">关注</div>
-      <div @click="authSwitch('/collect?typeId=1')">收藏</div>
-      <div @click="authSwitch('/collect?typeId=2')">点赞</div>
+      <div @click="authSwitch('/collect?typeId=1&objectId=1')">收藏</div>
+      <div @click="authSwitch('/collect?typeId=2&objectId=1')">点赞</div>
       <div @click="authSwitch('/point')">积分</div>
     </div>
     <div class="card-link">
+      <van-cell title="我发布的闲置" @click="authSwitch('/user/product')" is-link />
       <van-cell title="发布闲置" @click="authSwitch('/xzProductCreate')" is-link />
-      <van-cell title="我的发布" @click="authSwitch('/user/product')" is-link />
+      <van-cell title="发布需求" @click="authSwitch('/demand/create')" is-link />
       <van-cell title="地址管理" @click="authSwitch('/DeliveryAddress')" is-link />
       <van-cell title="账户设置" @click="authSwitch('/userInfo')" is-link />
       <van-cell title="立即登录" @click="$router.push('/login')" is-link />
